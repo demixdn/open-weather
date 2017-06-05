@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Open Weather</string>
+
+    <string name="degree_celsius">%1$d &#8451;</string>
+    <string name="degree_celsius_long">Temperature %1$d &#8451;</string>
+    <string name="pressure">Pressure %1$d mm</string>
+    <string name="humidity">Humidity %1$d</string>
+    <string name="wind">Wind %1$d m/s</string>
+    <string name="temp_min_max">%1$d&#176;/%2$d&#176;</string>
+    <string name="loading">Loading…</string>
+
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_cancel">Cancel</string>
+    <string name="dialog_error_title">Sorry</string>
+
+    <!--START Exception messages -->
+    <string name="exception_message_generic">There was an application error</string>
+    <string name="exception_message_no_connection">There is no internet connection</string>
+    <string name="exception_message_data_not_found">Cannot retrieve data. Check your internet connection</string>
+    <!--END Exception messages -->
+
+    <!--START Default strings -->
+    <string name="test_day_name">Fri</string>
+    <string name="test_description">Few clouds</string>
+    <string name="test_degree_celsius">6 &#8451;</string>
+    <string name="test_degree_celsius_long">Temperature 7 &#8451;</string>
+    <string name="test_pressure">Pressure 740 mm</string>
+    <string name="test_humidity">Humidity 90</string>
+    <string name="test_wind">Wind 3 m/s</string>
+    <string name="test_temp_min_max">5&#176;/12&#176;</string>
+    <!--END Default strings -->
+</resources>

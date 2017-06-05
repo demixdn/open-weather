@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:background="@color/colorPrimary"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:layout_weight="1">
+
+    <TextView
+        android:text="@string/test_day_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWeatherSubItemDay"
+        android:textAllCaps="true"
+        android:lines="1"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:text="@string/test_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:id="@+id/tvWeatherSubItemDesc"
+        android:textColor="@color/colorSemiWhite"
+        android:textSize="12sp"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:gravity="center_horizontal"/>
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/icon_09d"
+        android:id="@+id/ivWeatherSubItemIcon"
+        android:layout_gravity="center_horizontal"
+        tools:ignore="ContentDescription"/>
+
+    <TextView
+        android:text="@string/test_temp_min_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWeatherSubItemTemp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"/>
+</LinearLayout>
