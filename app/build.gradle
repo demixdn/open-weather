@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'weather'
+            keyPassword 'cOUGOr1vYNxZlU2I'
+            storeFile file('../buildsystem/weatherkeys.jks')
+            storePassword 'dwCX72tUo6LboRnc'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
-
     defaultConfig {
         applicationId "com.github.demixdn.weather"
         minSdkVersion 15
@@ -13,15 +20,18 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.releaseConfig
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false;
         }
-		debug {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable true;
         }
+    }
+    productFlavors {
     }
 }
 
@@ -31,5 +41,11 @@ dependencies {
     compile "com.android.support:design:${appCompatVersion}"
     compile "com.android.support:recyclerview-v7:${appCompatVersion}"
     compile "com.android.support:support-vector-drawable:${appCompatVersion}"
-    compile "com.google.code.gson:gson:2.8.1"
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.google.firebase:firebase-database:10.0.1'
+    compile 'com.google.firebase:firebase-auth:10.0.1'
 }
+
+
+
+apply plugin: 'com.google.gms.google-services'
