@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.github.demixdn.weather.ui.SignInActivity">
+
+    <TextView
+        android:id="@+id/tvSignTitles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/sign_in_with"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btFbLogin"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/com_facebook_button_background"
+        android:drawableLeft="@drawable/button_facebook_logo"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/button_facebook_logo"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="@string/btn_facebook"
+        android:textAllCaps="false"/>
+
+</LinearLayout>
