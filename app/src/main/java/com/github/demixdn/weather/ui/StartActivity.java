@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
 import com.github.demixdn.weather.data.FacebookLogin;
+import com.github.demixdn.weather.ui.transformation.CropCircleTransformation;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -30,6 +31,8 @@ public class StartActivity extends AppCompatActivity
     private FacebookLogin facebookLogin;
     private NavigationView navigationView;
     private FloatingActionButton fabAddCity;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
 
     public void setAppTypeface(@NonNull AppTypeface appTypeface) {
         this.appTypeface = appTypeface;
@@ -56,11 +59,10 @@ public class StartActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -80,7 +82,14 @@ public class StartActivity extends AppCompatActivity
                 tvUserName.setText(user.getDisplayName());
                 tvUserEmail.setText(user.getEmail());
                 ImageView ivUser = (ImageView) header.findViewById(R.id.ivUserPhoto);
-                Glide.with(this).load(user.getPhotoUrl()).asBitmap().placeholder(R.drawable.ic_person).error(R.drawable.ic_person).into(ivUser);
+                int size = getResources().getDimensionPixelSize(R.dimen.header_user_icon_size);
+                Glide.with(this)
+                        .load(user.getPhotoUrl())
+                        .override(size, size)
+                        .bitmapTransform(new CropCircleTransformation(this))
+                        .placeholder(R.drawable.ic_person)
+                        .error(R.drawable.ic_person)
+                        .into(ivUser);
             }
         }
     }

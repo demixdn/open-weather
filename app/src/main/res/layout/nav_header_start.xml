@@ -15,9 +15,11 @@
 
     <ImageView
         android:id="@+id/ivUserPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_width="@dimen/header_user_icon_size"
+        android:layout_height="@dimen/header_user_icon_size"
+        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         app:srcCompat="@drawable/ic_person"/>
 
     <TextView
