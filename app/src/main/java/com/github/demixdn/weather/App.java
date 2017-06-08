@@ -3,6 +3,8 @@ package com.github.demixdn.weather;
 
 import android.app.Application;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 public class App extends Application {
 
     private AppComponent appComponent;
@@ -18,6 +20,7 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         appComponent = new AppComponent(this);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     public static App getInstance() {

@@ -2,6 +2,7 @@ package com.github.demixdn.weather.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,19 @@ public class EmptyCitiesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_empty_cities, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.btAddCity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cityAddClickListener != null) {
+                    cityAddClickListener.onCityAddClick();
+                }
+            }
+        });
     }
 
     @Override

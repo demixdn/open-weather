@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,7 +23,6 @@ import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.auth.AuthManager;
 import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.repository.CitiesRepository;
-import com.github.demixdn.weather.ui.addcity.AddCityActivity;
 import com.github.demixdn.weather.ui.transformation.CropCircleTransformation;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.github.demixdn.weather.utils.Logger;
@@ -44,6 +44,9 @@ public class StartActivity extends AppCompatActivity
     private TextView tvUserEmail;
     private ImageView ivUser;
     private ProgressDialog progressDialog;
+    private FragmentManager fragmentManager;
+
+    private Navigator navigator;
 
 
     public void setAppTypeface(@NonNull AppTypeface appTypeface) {
@@ -64,6 +67,8 @@ public class StartActivity extends AppCompatActivity
         setContentView(R.layout.activity_start);
         App.getInstance().getAppComponent().inject(this);
         initUI();
+        fragmentManager = getSupportFragmentManager();
+        navigator = new Navigator();
     }
 
     private void initUI() {
@@ -97,33 +102,52 @@ public class StartActivity extends AppCompatActivity
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Get Cities in progress");
+        progressDialog.setCancelable(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (!authManager.isLogged()) {
-            SignInActivity.navigate(this);
+            navigator.showSignIn(this);
         } else {
-            FirebaseUser user = authManager.getActiveUser();
-            if (user != null) {
-                showUserInfoOnHeader(user);
-            }
-            progressDialog.show();
-            citiesRepository.getUserCities(new DataCallback<List<City>>() {
-                @Override
-                public void onSuccess(@NonNull List<City> cities) {
-                    Logger.d(cities.toString());
-                    progressDialog.dismiss();
-                }
-
-                @Override
-                public void onException(@NonNull Exception ex) {
-                    progressDialog.dismiss();
-                    Logger.e(ex);
-                }
-            });
+            showUserInfo();
+            showCitiesForUser();
         }
+    }
+
+    private void showUserInfo() {
+        FirebaseUser user = authManager.getActiveUser();
+        if (user != null) {
+            showUserInfoOnHeader(user);
+        }
+    }
+
+    private void showCitiesForUser() {
+        progressDialog.show();
+        citiesRepository.getUserCities(new DataCallback<List<City>>() {
+            @Override
+            public void onSuccess(@NonNull List<City> cities) {
+                Logger.d(cities.toString());
+                progressDialog.dismiss();
+                if (cities.isEmpty()) {
+                    showEmptyState();
+                } else {
+                    showCities();
+                }
+            }
+
+            @Override
+            public void onException(@NonNull Exception ex) {
+                progressDialog.dismiss();
+                Logger.e(ex);
+                showEmptyState();
+            }
+        });
+    }
+
+    private void showCities() {
+        navigator.showCities(fragmentManager);
     }
 
     private void showUserInfoOnHeader(@NonNull FirebaseUser user) {
@@ -157,11 +181,11 @@ public class StartActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_cities) {
-
+            showCities();
         } else if (id == R.id.nav_profile) {
-
+            showProfile();
         } else if (id == R.id.nav_about) {
-
+            showAppInfo();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -169,8 +193,21 @@ public class StartActivity extends AppCompatActivity
         return true;
     }
 
+    private void showAppInfo() {
+        navigator.showInfo(fragmentManager);
+    }
+
+    private void showProfile() {
+        navigator.showProfile(fragmentManager);
+    }
+
+
+    private void showEmptyState() {
+        navigator.showEmptyState(fragmentManager);
+    }
+
     @Override
     public void onCityAddClick() {
-        AddCityActivity.navigate(this);
+        navigator.showAddCity(this);
     }
 }

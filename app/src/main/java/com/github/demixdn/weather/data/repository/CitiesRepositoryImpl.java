@@ -41,6 +41,7 @@ public class CitiesRepositoryImpl implements CitiesRepository {
         this.resources = resources;
         this.authManager = authManager;
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
     }
 
     @Override
