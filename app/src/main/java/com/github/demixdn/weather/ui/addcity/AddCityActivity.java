@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -35,7 +36,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityView {
         Intent starter = new Intent(context, AddCityActivity.class);
         context.startActivity(starter);
     }
-    
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityView {
     }
 
     private void init(@Nullable Bundle savedInstanceState) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initUI();
         App.getInstance().getAppComponent().inject(this);
         presenter.onViewCreated(savedInstanceState);
@@ -57,7 +59,19 @@ public class AddCityActivity extends AppCompatActivity implements AddCityView {
 
     private void initUI() {
         autoCompleteCityField = (AutoCompleteTextView) findViewById(R.id.atvAddCityFiled);
+        autoCompleteCityField.clearFocus();
         approvedContainer = (LinearLayout) findViewById(R.id.llApprovedCities);
+        approvedContainer.requestFocus();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

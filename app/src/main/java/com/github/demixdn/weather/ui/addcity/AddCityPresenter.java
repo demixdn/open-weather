@@ -91,7 +91,7 @@ public class AddCityPresenter extends BasePresenter<AddCityView> {
     }
 
     @NonNull
-    public Map<String, Boolean> getCityStatusCache() {
+    Map<String, Boolean> getCityStatusCache() {
         return cityStatusCache;
     }
 }

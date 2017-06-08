@@ -10,10 +10,13 @@
         android:orientation="vertical"
         tools:context="com.github.demixdn.weather.ui.addcity.AddCityActivity">
 
+        <requestFocus/>
+
         <LinearLayout
             android:id="@+id/llApprovedCities"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
             android:orientation="vertical">
 
         </LinearLayout>
