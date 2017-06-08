@@ -1,0 +1,39 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="com.github.demixdn.weather.ui.addcity.AddCityActivity">
+
+        <LinearLayout
+            android:id="@+id/llApprovedCities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/atvAddCityFiled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:hint="@string/enter_your_city"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>

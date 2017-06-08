@@ -13,15 +13,15 @@ import android.widget.Toast;
 
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
-import com.github.demixdn.weather.data.FacebookLogin;
-import com.github.demixdn.weather.data.LoginCallback;
+import com.github.demixdn.weather.data.auth.AuthManager;
+import com.github.demixdn.weather.data.auth.LoginCallback;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener, LoginCallback {
 
     private AppTypeface appTypeface;
-    private FacebookLogin facebookLogin;
+    private AuthManager authManager;
     private ProgressDialog progressDialog;
 
     public static void navigate(@NonNull Context context) {
@@ -33,8 +33,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         this.appTypeface = appTypeface;
     }
 
-    public void setFacebookLoginDelegate(@NonNull FacebookLogin facebookLogin) {
-        this.facebookLogin = facebookLogin;
+    public void setFacebookLoginDelegate(@NonNull AuthManager authManager) {
+        this.authManager = authManager;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_in);
         App.getInstance().getAppComponent().inject(this);
         initUI();
-        facebookLogin.bind(this);
+        authManager.bind(this);
     }
 
     private void initUI() {
@@ -59,7 +59,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
-        facebookLogin.unbind();
+        authManager.unbind();
         super.onDestroy();
     }
 
@@ -74,14 +74,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loginAction() {
-        facebookLogin.login(this);
+        authManager.login(this);
         progressDialog.show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        facebookLogin.onActivityResult(requestCode, resultCode, data);
+        authManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

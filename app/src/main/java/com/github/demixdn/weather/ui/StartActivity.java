@@ -1,10 +1,10 @@
 package com.github.demixdn.weather.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,28 +18,44 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
-import com.github.demixdn.weather.data.FacebookLogin;
+import com.github.demixdn.weather.data.DataCallback;
+import com.github.demixdn.weather.data.auth.AuthManager;
+import com.github.demixdn.weather.data.model.City;
+import com.github.demixdn.weather.data.repository.CitiesRepository;
+import com.github.demixdn.weather.ui.addcity.AddCityActivity;
 import com.github.demixdn.weather.ui.transformation.CropCircleTransformation;
 import com.github.demixdn.weather.utils.AppTypeface;
+import com.github.demixdn.weather.utils.Logger;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
+
 public class StartActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        EmptyCitiesFragment.OnCityAddClickListener {
 
 
     private AppTypeface appTypeface;
-    private FacebookLogin facebookLogin;
+    private AuthManager authManager;
+    private CitiesRepository citiesRepository;
     private NavigationView navigationView;
     private FloatingActionButton fabAddCity;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
+    private TextView tvUserName;
+    private TextView tvUserEmail;
+    private ImageView ivUser;
+    private ProgressDialog progressDialog;
+
 
     public void setAppTypeface(@NonNull AppTypeface appTypeface) {
         this.appTypeface = appTypeface;
     }
 
-    public void setFacebookLoginDelegate(@NonNull FacebookLogin facebookLogin) {
-        this.facebookLogin = facebookLogin;
+    public void setFacebookLoginDelegate(@NonNull AuthManager facebookLogin) {
+        this.authManager = facebookLogin;
+    }
+
+    public void setCitiesRepository(CitiesRepository citiesRepository) {
+        this.citiesRepository = citiesRepository;
     }
 
     @Override
@@ -47,6 +63,10 @@ public class StartActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         App.getInstance().getAppComponent().inject(this);
+        initUI();
+    }
+
+    private void initUI() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -54,44 +74,71 @@ public class StartActivity extends AppCompatActivity
         fabAddCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                onCityAddClick();
             }
         });
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        tvUserName = (TextView) header.findViewById(R.id.tvUserName);
+        tvUserEmail = (TextView) header.findViewById(R.id.tvUserEmail);
+        ivUser = (ImageView) header.findViewById(R.id.ivUserPhoto);
+
+        tvUserName.setTypeface(appTypeface.get(AppTypeface.Roboto.REGULAR));
+        tvUserEmail.setTypeface(appTypeface.get(AppTypeface.Roboto.REGULAR));
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Get Cities in progress");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!facebookLogin.isLogged()) {
+        if (!authManager.isLogged()) {
             SignInActivity.navigate(this);
         } else {
-            View header = navigationView.getHeaderView(0);
-            TextView tvUserName = (TextView) header.findViewById(R.id.tvUserName);
-            TextView tvUserEmail = (TextView) header.findViewById(R.id.tvUserEmail);
-            FirebaseUser user = facebookLogin.getActiveUser();
+            FirebaseUser user = authManager.getActiveUser();
             if (user != null) {
-                tvUserName.setText(user.getDisplayName());
-                tvUserEmail.setText(user.getEmail());
-                ImageView ivUser = (ImageView) header.findViewById(R.id.ivUserPhoto);
-                int size = getResources().getDimensionPixelSize(R.dimen.header_user_icon_size);
-                Glide.with(this)
-                        .load(user.getPhotoUrl())
-                        .override(size, size)
-                        .bitmapTransform(new CropCircleTransformation(this))
-                        .placeholder(R.drawable.ic_person)
-                        .error(R.drawable.ic_person)
-                        .into(ivUser);
+                showUserInfoOnHeader(user);
             }
+            progressDialog.show();
+            citiesRepository.getUserCities(new DataCallback<List<City>>() {
+                @Override
+                public void onSuccess(@NonNull List<City> cities) {
+                    Logger.d(cities.toString());
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onException(@NonNull Exception ex) {
+                    progressDialog.dismiss();
+                    Logger.e(ex);
+                }
+            });
         }
+    }
+
+    private void showUserInfoOnHeader(@NonNull FirebaseUser user) {
+        tvUserName.setText(user.getDisplayName());
+        tvUserEmail.setText(user.getEmail());
+        int size = getResources().getDimensionPixelSize(R.dimen.header_user_icon_size);
+        Glide.with(this)
+                .load(user.getPhotoUrl())
+                .override(size, size)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .crossFade()
+                .into(ivUser);
+
     }
 
     @Override
@@ -106,12 +153,11 @@ public class StartActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_cities) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_about) {
@@ -121,5 +167,10 @@ public class StartActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onCityAddClick() {
+        AddCityActivity.navigate(this);
     }
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivAddedCityStatusApproved"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="@android:color/transparent"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/ic_done_all"/>
+
+    <ProgressBar
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginEnd="4dp"
+        android:id="@+id/ivAddedCityStatusProgress"
+        android:visibility="visible"
+        style="?android:attr/progressBarStyleSmall"/>
+
+    <TextView
+        android:id="@+id/tvAddedCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@+id/ivAddedCityStatusApproved"
+        android:layout_toEndOf="@+id/ivAddedCityStatusApproved"
+        android:layout_toLeftOf="@+id/btCancelCity"
+        android:layout_toStartOf="@+id/btCancelCity"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+
+    <ImageButton
+        android:id="@+id/btCancelCity"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        app:srcCompat="@drawable/ic_clear"/>
+</RelativeLayout>

@@ -33,10 +33,12 @@
         <item name="android:layout_marginTop">8dp</item>
     </style>
 
-    <style name="CurrentPressHum" parent="CurrentSubText">
+    <style name="CurrentPressHum">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:background">@drawable/line</item>
-        <item name="android:gravity">left</item>
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:textColor">@color/colorSemiWhite</item>
     </style>
 

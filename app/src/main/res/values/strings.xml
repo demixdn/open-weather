@@ -35,6 +35,7 @@
     <string name="sign_in_activity_title">Sign in</string>
     <string name="sign_in_with">Sign in with</string>
     <string name="title_activity_start">Weather</string>
+    <string name="add_your_city">Add city</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -44,4 +45,10 @@
     <string name="application_group">Application</string>
     <string name="profile">Profile</string>
     <string name="about">About</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_state_city">There is no city to track the weather.\nAdd your city.</string>
+    <string name="enter_your_city">Please enter your City</string>
+    <string name="choose_your_city">Choose your city</string>
 </resources>

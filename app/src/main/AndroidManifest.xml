@@ -33,6 +33,10 @@
             android:name=".ui.SignInActivity"
             android:label="@string/sign_in_activity_title">
         </activity>
+        <activity
+            android:name=".ui.addcity.AddCityActivity"
+            android:label="@string/add_your_city">
+        </activity>
     </application>
 
 </manifest>
