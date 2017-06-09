@@ -1,5 +1,6 @@
 package com.github.demixdn.weather.data.model.weatherdto;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 /**
@@ -10,9 +11,13 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
  */
 @JsonObject
 public class ConditionDTO {
+    @JsonField
     public int id;
+    @JsonField
     public String main;
+    @JsonField
     public String description;
+    @JsonField
     public String icon;
 
 }
