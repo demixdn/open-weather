@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
@@ -18,14 +17,15 @@ import java.util.List;
  * @author Aleks Sander
  */
 @JsonObject
-public final class City {
+public final class City implements Comparable<City> {
     @JsonField(name = "name")
     public String name;
     @JsonField(name = "country")
     public String country;
 
+    @NonNull
     public static List<City> parseJson(@Nullable String json) throws IOException {
-        return LoganSquare.parseList(json, City.class);
+        return JsonParser.parseCitiesJson(json);
     }
 
     public City() {
@@ -51,7 +51,31 @@ public final class City {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        City city = (City) o;
+
+        if (!name.equals(city.name)) return false;
+        return country != null ? country.equals(city.country) : city.country == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + (country != null ? country.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "City{ '" + name + "'; '" + country + "\'}";
+    }
+
+    @Override
+    public int compareTo(@NonNull City o) {
+        return name.compareToIgnoreCase(o.name);
     }
 }

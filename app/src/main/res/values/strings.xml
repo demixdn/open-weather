@@ -51,4 +51,5 @@
     <string name="empty_state_city">There is no city to track the weather.\nAdd your city.</string>
     <string name="enter_your_city">Please enter your City</string>
     <string name="choose_your_city">Choose your city</string>
+    <string name="long_city_title">Long City Title, AU</string>
 </resources>

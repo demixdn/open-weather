@@ -24,15 +24,6 @@ public class CityTest {
     private static final String jsonCities = "[{\"id\":707860,\"name\":\"Hurzuf\",\"country\":\"UA\"},{\"id\":519188,\"name\":\"Novinki\",\"country\":\"RU\"}]";
 
     @Test
-    public void parseJson_allSuccess() throws Exception {
-        List<City> cities = City.parseJson(jsonCities);
-        assertThat(cities.get(0).name, is("Hurzuf"));
-        assertThat(cities.get(0).country, is("UA"));
-        assertThat(cities.get(1).name, is("Novinki"));
-        assertThat(cities.get(1).country, is("RU"));
-    }
-
-    @Test
     public void fromString_nameAndCountry() throws Exception {
         String source = "Hurzuf, UA";
         City city = new City(source);
