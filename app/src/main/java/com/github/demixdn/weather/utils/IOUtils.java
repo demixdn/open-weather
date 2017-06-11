@@ -43,6 +43,19 @@ public final class IOUtils {
     }
 
     @Nullable
+    public static String getStringFrom(@Nullable InputStream inputStream, @NonNull String encoding) throws IOException {
+        try {
+            String result = null;
+            if (inputStream != null) {
+                result = writeStreamToString(inputStream, DEFAULT_BUFFER_SIZE, encoding);
+            }
+            return result;
+        } finally {
+            closeQuietly(inputStream);
+        }
+    }
+
+    @Nullable
     public static String getStringFrom(@Nullable InputStream inputStream,
                                        @IntRange(from = SMALL_BUFFER_SIZE, to = Integer.MAX_VALUE) int bufferSize)
             throws IOException {
