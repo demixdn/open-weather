@@ -50,6 +50,10 @@ public final class City implements Comparable<City> {
         return name + "," + country.toLowerCase();
     }
 
+    public String toDatabaseKey() {
+        return toQueryString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
