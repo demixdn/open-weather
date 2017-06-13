@@ -10,8 +10,8 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:id="@+id/llCityContent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TextView
             android:id="@+id/tvCityItemTitle"

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import com.github.demixdn.weather.R;
 import com.github.demixdn.weather.ui.addcity.AddCityActivity;
 import com.github.demixdn.weather.ui.cities.CitiesFragment;
+import com.github.demixdn.weather.ui.cities.EmptyCitiesFragment;
 
 /**
  * Created on 08.06.2017

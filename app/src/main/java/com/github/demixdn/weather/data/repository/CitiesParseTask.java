@@ -1,4 +1,4 @@
-package com.github.demixdn.weather.data.tasks.cities;
+package com.github.demixdn.weather.data.repository;
 
 import android.content.res.Resources;
 import android.os.Handler;
@@ -21,13 +21,13 @@ import java.util.List;
  * @author Aleks Sander
  */
 
-public final class CitiesParseTask implements Runnable {
+final class CitiesParseTask implements Runnable {
 
     private final ParseListener parseListener;
     private final Resources resources;
     private final Handler handler;
 
-    public CitiesParseTask(@NonNull ParseListener parseListener, @NonNull Resources resources) {
+    CitiesParseTask(@NonNull ParseListener parseListener, @NonNull Resources resources) {
         this.parseListener = parseListener;
         this.resources = resources;
         handler = new Handler(Looper.getMainLooper());

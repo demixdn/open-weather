@@ -58,4 +58,9 @@
     <string name="choose_your_city">Choose your city</string>
     <string name="long_city_title">Long City Title, AU</string>
     <string name="button_undo">Undo</string>
+    <string name="weather_api">Weather API: http://openweathermap.org/</string>
+    <string name="repository">Repository: https://github.com/demixdn/open-weather</string>
+    <string name="developer_email">Email: demixdn@gmail.com</string>
+    <string name="developer_name">Aleksandr Pluzhnik</string>
+    <string name="developer_title">Developer</string>
 </resources>

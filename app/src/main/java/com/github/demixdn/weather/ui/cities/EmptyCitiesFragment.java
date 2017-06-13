@@ -1,4 +1,4 @@
-package com.github.demixdn.weather.ui;
+package com.github.demixdn.weather.ui.cities;
 
 import android.content.Context;
 import android.os.Bundle;

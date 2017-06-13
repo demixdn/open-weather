@@ -1,4 +1,4 @@
-package com.github.demixdn.weather.data.tasks.cities;
+package com.github.demixdn.weather.data.repository;
 
 import java.util.List;
 
@@ -9,12 +9,12 @@ import java.util.List;
  * @author Aleks Sander
  */
 
-public final class ParseResult {
+final class ParseResult {
 
-    public long runDuration;
+    private long runDuration;
     public List<String> cities;
 
-    public ParseResult(long runDuration, List<String> cities) {
+    ParseResult(long runDuration, List<String> cities) {
         this.runDuration = runDuration;
         this.cities = cities;
     }

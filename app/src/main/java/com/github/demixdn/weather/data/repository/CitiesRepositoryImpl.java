@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.auth.AuthManager;
 import com.github.demixdn.weather.data.model.City;
-import com.github.demixdn.weather.data.tasks.cities.CitiesParseTask;
-import com.github.demixdn.weather.data.tasks.cities.ParseResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

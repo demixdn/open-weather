@@ -23,6 +23,7 @@ import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.auth.AuthManager;
 import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.repository.CitiesRepository;
+import com.github.demixdn.weather.ui.cities.EmptyCitiesFragment;
 import com.github.demixdn.weather.ui.transformation.CropCircleTransformation;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.github.demixdn.weather.utils.Logger;
@@ -35,6 +36,9 @@ public class StartActivity extends AppCompatActivity
         EmptyCitiesFragment.OnCityAddClickListener {
 
 
+    private static final int INDEX_CITY = 0;
+    private static final int INDEX_PROFILE = 1;
+    private static final int INDEX_ABOUT = 2;
     private AppTypeface appTypeface;
     private AuthManager authManager;
     private CitiesRepository citiesRepository;
@@ -92,7 +96,7 @@ public class StartActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View header = navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(INDEX_CITY);
         tvUserName = (TextView) header.findViewById(R.id.tvUserName);
         tvUserEmail = (TextView) header.findViewById(R.id.tvUserEmail);
         ivUser = (ImageView) header.findViewById(R.id.ivUserPhoto);
@@ -146,12 +150,6 @@ public class StartActivity extends AppCompatActivity
             }
         };
         citiesRepository.getUserCities(citiesCallback);
-    }
-
-    private void showCities() {
-        fabShow();
-        navigator.showCities(fragmentManager);
-        citiesCallback = null;
     }
 
     private void showUserInfoOnHeader(@NonNull FirebaseUser user) {
@@ -209,18 +207,28 @@ public class StartActivity extends AppCompatActivity
         }
     }
 
+    private void showCities() {
+        navigationView.getMenu().getItem(INDEX_CITY).setChecked(true);
+        fabShow();
+        navigator.showCities(fragmentManager);
+        citiesCallback = null;
+    }
+
     private void showAppInfo() {
+        navigationView.getMenu().getItem(INDEX_ABOUT).setChecked(true);
         fabHide();
         navigator.showInfo(fragmentManager);
     }
 
     private void showProfile() {
+        navigationView.getMenu().getItem(INDEX_PROFILE).setChecked(true);
         fabHide();
         navigator.showProfile(fragmentManager);
     }
 
 
     private void showEmptyState() {
+        navigationView.getMenu().getItem(INDEX_CITY).setChecked(true);
         fabHide();
         navigator.showEmptyState(fragmentManager);
     }
