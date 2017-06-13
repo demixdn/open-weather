@@ -2,6 +2,6 @@
 
 Project with weather using forecast API from [Open Weather Map](http://openweathermap.org/) .
 
-Used [Gson](https://github.com/google/gson/), [Firebase](https://firebase.google.com/) and MVP patter.
+Used [LoganSquare](https://github.com/bluelinelabs/LoganSquare) for parsing, [Facebook API](https://developers.facebook.com/docs/android/) for auth, [Firebase](https://firebase.google.com/) as database and MVP pattern.
 
-**Education project**. 
+**Test project**.
