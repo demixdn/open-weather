@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
+import com.github.demixdn.weather.data.Observable;
 import com.github.demixdn.weather.data.auth.AuthManager;
 import com.github.demixdn.weather.data.auth.AuthManagerImpl;
 import com.github.demixdn.weather.data.executor.JobExecutor;
@@ -13,16 +14,17 @@ import com.github.demixdn.weather.data.repository.CitiesRepositoryImpl;
 import com.github.demixdn.weather.data.repository.WeatherRepository;
 import com.github.demixdn.weather.data.repository.WeatherRepositoryImpl;
 import com.github.demixdn.weather.ui.SignInActivity;
-import com.github.demixdn.weather.ui.navigation.StartActivity;
+import com.github.demixdn.weather.ui.addcity.AddCityActivity;
 import com.github.demixdn.weather.ui.addcity.AddCityPresenter;
-import com.github.demixdn.weather.ui.addcity.AddCityView;
+import com.github.demixdn.weather.ui.cities.CitiesFragment;
 import com.github.demixdn.weather.ui.cities.CitiesPresenter;
-import com.github.demixdn.weather.ui.cities.CitiesView;
+import com.github.demixdn.weather.ui.navigation.StartActivity;
 import com.github.demixdn.weather.ui.navigation.StarterPresenter;
 import com.github.demixdn.weather.ui.profile.ProfileFragment;
 import com.github.demixdn.weather.ui.profile.ProfilePresenter;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.Executor;
 
@@ -37,19 +39,27 @@ public final class AppComponent {
 
     private final Context applicationContext;
     private AppTypeface appTypeface;
+
     private AuthManager authManager;
-    private AddCityPresenter addCityPresenter;
+
     private Resources resources;
-    private CitiesRepository citiesRepository;
-    private WeatherRepository weatherRepository;
+
+    private JobExecutor jobExecutor;
+
     private NetworkConnection networkConnection;
+
+    private WeatherRepository weatherRepository;
+    private CitiesRepository citiesRepository;
+
+    private AddCityPresenter addCityPresenter;
     private CitiesPresenter citiesPresenter;
     private StarterPresenter starterPresenter;
     private ProfilePresenter profilePresenter;
-    private JobExecutor jobExecutor;
+    private Observable reloadObservalble;
 
     public AppComponent(@NonNull Context applicationContext) {
         this.applicationContext = applicationContext;
+        this.reloadObservalble = new Observable();
     }
 
     private synchronized AppTypeface getAppTypeface() {
@@ -78,10 +88,14 @@ public final class AppComponent {
     }
 
     private synchronized CitiesRepository getCitiesRepository() {
-        if (citiesRepository == null) {
-            citiesRepository = new CitiesRepositoryImpl(getResources(), getAuthManager());
-        }
+        createCitiesRepo();
         return citiesRepository;
+    }
+
+    private void createCitiesRepo() {
+        if (citiesRepository == null) {
+            citiesRepository = new CitiesRepositoryImpl(getResources(), getAuthManager(), FirebaseDatabase.getInstance());
+        }
     }
 
     private synchronized Resources getResources() {
@@ -106,10 +120,14 @@ public final class AppComponent {
     }
 
     private synchronized WeatherRepository getWeatherRepository() {
-        if (weatherRepository == null) {
-            weatherRepository = new WeatherRepositoryImpl(getNetworkConnection(), getExecutor());
-        }
+        createWeatherRepo();
         return weatherRepository;
+    }
+
+    private void createWeatherRepo() {
+        if (weatherRepository == null) {
+            weatherRepository = new WeatherRepositoryImpl(getNetworkConnection(), getExecutor(), FirebaseDatabase.getInstance());
+        }
     }
 
     private synchronized CitiesPresenter getCitiesPresenter() {
@@ -121,7 +139,7 @@ public final class AppComponent {
 
     private synchronized StarterPresenter getStarterPresenter() {
         if (starterPresenter == null) {
-            starterPresenter = new StarterPresenter(FirebaseAuth.getInstance(), getCitiesRepository());
+            starterPresenter = new StarterPresenter(getFirebaseAuth(), getCitiesRepository());
         }
         return starterPresenter;
     }
@@ -133,23 +151,37 @@ public final class AppComponent {
         return profilePresenter;
     }
 
+    public void reload() {
+        weatherRepository = null;
+        citiesRepository = null;
+
+        addCityPresenter = null;
+        citiesPresenter = null;
+        starterPresenter = null;
+        profilePresenter = null;
+        reloadObservalble.notifyObservers();
+    }
+
     public void inject(SignInActivity signInActivity) {
         signInActivity.setAppTypeface(getAppTypeface());
         signInActivity.setAuthDelegate(getAuthManager());
     }
 
     public void inject(StartActivity startActivity) {
+        reloadObservalble.addObserver(startActivity);
         startActivity.setAppTypeface(getAppTypeface());
         startActivity.bindPresenter(getStarterPresenter());
         startActivity.getPresenter().bindView(startActivity);
     }
 
-    public void inject(AddCityView view) {
+    public void inject(AddCityActivity view) {
+        reloadObservalble.addObserver(view);
         view.bindPresenter(getAddCityPresenter());
         view.getPresenter().bindView(view);
     }
 
-    public void inject(CitiesView view) {
+    public void inject(CitiesFragment view) {
+        reloadObservalble.addObserver(view);
         view.bindPresenter(getCitiesPresenter());
         view.getPresenter().bindView(view);
     }

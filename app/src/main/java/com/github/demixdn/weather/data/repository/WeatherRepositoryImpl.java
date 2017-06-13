@@ -28,15 +28,16 @@ public class WeatherRepositoryImpl implements WeatherRepository {
 
 
     public WeatherRepositoryImpl(@NonNull NetworkConnection networkConnection,
-                                 @NonNull Executor weatherExecutor) {
+                                 @NonNull Executor weatherExecutor,
+                                 @NonNull FirebaseDatabase database) {
         this.networkConnection = networkConnection;
-        this.database = getWeatherReference();
+        this.database = getWeatherReference(database);
         this.database.keepSynced(true);
         this.weatherExecutor = weatherExecutor;
     }
 
-    private DatabaseReference getWeatherReference() {
-        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference getWeatherReference(FirebaseDatabase database) {
+        DatabaseReference userReference = database.getReference();
         return userReference.child("weather_cache");
     }
 

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
+import com.github.demixdn.weather.data.Observer;
 import com.github.demixdn.weather.utils.Logger;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddCityActivity extends AppCompatActivity implements AddCityView {
+public class AddCityActivity extends AppCompatActivity implements AddCityView, Observer {
 
 
     private AutoCompleteTextView autoCompleteCityField;
@@ -122,5 +123,11 @@ public class AddCityActivity extends AppCompatActivity implements AddCityView {
     @Override
     public void onAddRemoveApproved(@NonNull String cityName, boolean result) {
         citiesDelegate.onAddRemoveApproved(cityName, result);
+    }
+
+    @Override
+    public void update() {
+        Logger.d("Observable update AddCity");
+        App.getInstance().getAppComponent().inject(this);
     }
 }

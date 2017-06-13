@@ -34,14 +34,15 @@ public class CitiesRepositoryImpl implements CitiesRepository {
     private final Resources resources;
     private final DatabaseReference userReference;
     private CitiesValueEventListener valueEventListener;
+    private ValueEventListener subscribeValueEventListener;
 
-    public CitiesRepositoryImpl(@NonNull Resources resources, @NonNull AuthManager authManager) {
+    public CitiesRepositoryImpl(@NonNull Resources resources, @NonNull AuthManager authManager, @NonNull FirebaseDatabase database) {
         this.resources = resources;
         FirebaseUser currentUser = authManager.getActiveUser();
         if (currentUser == null) {
             userReference = null;
         } else {
-            userReference = FirebaseDatabase.getInstance().getReference().child(currentUser.getUid());
+            userReference = database.getReference().child(currentUser.getUid());
         }
     }
 
@@ -90,8 +91,11 @@ public class CitiesRepositoryImpl implements CitiesRepository {
         if (userReference == null) {
             callback.onSuccess(Collections.<City>emptyList());
         } else {
-            ValueEventListener valueEventListener = new CitiesValueEventListener(callback);
-            userReference.addValueEventListener(valueEventListener);
+            if (subscribeValueEventListener != null) {
+                userReference.removeEventListener(subscribeValueEventListener);
+            }
+            subscribeValueEventListener = new CitiesValueEventListener(callback);
+            userReference.addValueEventListener(subscribeValueEventListener);
         }
     }
 

@@ -24,6 +24,7 @@ import java.util.List;
  */
 
 public class CitiesPresenter extends BasePresenter<CitiesView> {
+    private static final int CHECK_TASK_ENDED_DELAY = 4000;
     @NonNull
     private final CitiesRepository citiesRepository;
     @NonNull
@@ -32,6 +33,7 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
 
     private final Handler checkHandler;
     private final Runnable postRunnable;
+    private int count = 0;
 
     public CitiesPresenter(@NonNull CitiesRepository citiesRepository, @NonNull WeatherRepository weatherRepository) {
         this.citiesRepository = citiesRepository;
@@ -40,7 +42,15 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
         postRunnable = new Runnable() {
             @Override
             public void run() {
-                loadWeather();
+                count++;
+                if (count == 4) {
+                    if (getView() != null) {
+                        getView().showError("You have not registered city");
+
+                    }
+                } else {
+                    loadWeather();
+                }
             }
         };
     }
@@ -50,11 +60,15 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
         if (getView() != null) {
             getView().showProgress();
         }
-        checkHandler.postDelayed(postRunnable, 4000);
+        checkHandler.postDelayed(postRunnable, CHECK_TASK_ENDED_DELAY);
         weatherEmitter = new CitiesWeatherEmitter();
         citiesRepository.getUserCities(new DataCallback<List<City>>() {
             @Override
             public void onSuccess(@NonNull List<City> cities) {
+                if (cities.isEmpty() && getView() != null) {
+                    getView().showError("You have not registered city");
+
+                }
                 weatherRepository.getWeather(cities, weatherEmitter);
 //                Logger.d(cities.toString());
             }

@@ -25,8 +25,10 @@ import android.view.ViewGroup;
 
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
+import com.github.demixdn.weather.data.Observer;
 import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.model.Weather;
+import com.github.demixdn.weather.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CitiesFragment extends Fragment implements CitiesView, CityRemoveListener {
+public class CitiesFragment extends Fragment implements CitiesView, CityRemoveListener, Observer {
 
 
     private CitiesPresenter presenter;
@@ -63,6 +65,12 @@ public class CitiesFragment extends Fragment implements CitiesView, CityRemoveLi
         App.getInstance().getAppComponent().inject(this);
         initAdapter();
         getPresenter().loadWeather();
+    }
+
+    @Override
+    public void onDestroyView() {
+        getPresenter().unbindView();
+        super.onDestroyView();
     }
 
     private void initUI(View root) {
@@ -172,7 +180,6 @@ public class CitiesFragment extends Fragment implements CitiesView, CityRemoveLi
         mItemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-
     private void setUpAnimationDecoratorHelper() {
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
 
@@ -261,6 +268,7 @@ public class CitiesFragment extends Fragment implements CitiesView, CityRemoveLi
 
     @Override
     public void showError(String errorMessage) {
+        hideProgress();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.dialog_error_title);
         builder.setMessage(R.string.dialog_error_default_message_retry);
@@ -277,6 +285,7 @@ public class CitiesFragment extends Fragment implements CitiesView, CityRemoveLi
                 dialog.dismiss();
             }
         });
+        builder.create().show();
     }
 
     @Override
@@ -297,5 +306,11 @@ public class CitiesFragment extends Fragment implements CitiesView, CityRemoveLi
     @Override
     public void onCityRemoved(@NonNull City removedCity) {
         getPresenter().onCityRemove(removedCity);
+    }
+
+    @Override
+    public void update() {
+        Logger.d("Observable update CitiesFragment");
+        App.getInstance().getAppComponent().inject(this);
     }
 }

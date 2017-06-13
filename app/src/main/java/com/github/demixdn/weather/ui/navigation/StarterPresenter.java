@@ -2,6 +2,7 @@ package com.github.demixdn.weather.ui.navigation;
 
 import android.support.annotation.NonNull;
 
+import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.repository.CitiesRepository;
@@ -25,7 +26,7 @@ public final class StarterPresenter extends BasePresenter<StartView> {
     private final CitiesRepository citiesRepository;
     private final DataCallback<List<City>> citiesCallback;
 
-    public StarterPresenter(@NonNull FirebaseAuth firebaseAuth, @NonNull CitiesRepository citiesRepository) {
+    public StarterPresenter(@NonNull FirebaseAuth firebaseAuth, @NonNull final CitiesRepository citiesRepository) {
         this.authManager = firebaseAuth;
         this.citiesRepository = citiesRepository;
         citiesCallback = new DataCallback<List<City>>() {
@@ -48,7 +49,7 @@ public final class StarterPresenter extends BasePresenter<StartView> {
                 }
             }
         };
-        this.citiesRepository.subscribeToCityChanges(citiesCallback);
+        subscribe();
         this.authManager.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -57,8 +58,10 @@ public final class StarterPresenter extends BasePresenter<StartView> {
                     if (getView() != null) {
                         getView().showLoginScreen();
                     }
-                } else if (getView() != null) {
-                    getView().showUser(user);
+                } else {
+                    if (getView() != null) {
+                        getView().showUser(user);
+                    }
                 }
             }
         });
@@ -66,5 +69,9 @@ public final class StarterPresenter extends BasePresenter<StartView> {
 
     void viewReady() {
         citiesRepository.getUserCities(citiesCallback);
+    }
+
+    void subscribe() {
+        this.citiesRepository.subscribeToCityChanges(citiesCallback);
     }
 }

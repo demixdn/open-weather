@@ -49,6 +49,12 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
     }
 
     @Override
+    public void onDestroyView() {
+        getPresenter().unbindView();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initUI(view);

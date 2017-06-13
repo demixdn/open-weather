@@ -21,14 +21,17 @@ import android.widget.TextView;
 
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
+import com.github.demixdn.weather.data.Observer;
 import com.github.demixdn.weather.ui.cities.EmptyCitiesFragment;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.github.demixdn.weather.utils.ImageHelper;
+import com.github.demixdn.weather.utils.Logger;
 import com.google.firebase.auth.FirebaseUser;
+
 
 public class StartActivity extends AppCompatActivity
         implements StartView, NavigationView.OnNavigationItemSelectedListener,
-        EmptyCitiesFragment.OnCityAddClickListener {
+        EmptyCitiesFragment.OnCityAddClickListener, Observer {
 
 
     private static final int REQUEST_CODE_SIGN = 1001;
@@ -107,7 +110,14 @@ public class StartActivity extends AppCompatActivity
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        progressDialog.show();
         getPresenter().viewReady();
+    }
+
+    @Override
+    protected void onDestroy() {
+        getPresenter().unbindView();
+        super.onDestroy();
     }
 
     @Override
@@ -152,6 +162,7 @@ public class StartActivity extends AppCompatActivity
 
     @Override
     public void showCities() {
+        progressDialog.dismiss();
         navigationView.getMenu().getItem(INDEX_CITY).setChecked(true);
         fabShow();
         navigator.showCities(fragmentManager);
@@ -169,9 +180,9 @@ public class StartActivity extends AppCompatActivity
         navigator.showProfile(fragmentManager);
     }
 
-
     @Override
     public void showLoginScreen() {
+        progressDialog.dismiss();
         navigator.showSignIn(this, REQUEST_CODE_SIGN);
     }
 
@@ -210,12 +221,22 @@ public class StartActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_SIGN) {
             if (resultCode == RESULT_OK) {
-                getPresenter().viewReady();
+                progressDialog.dismiss();
+                App.getInstance().getAppComponent().reload();
             } else {
                 finish();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void update() {
+        Logger.d("Observable update StartActivity");
+        App.getInstance().getAppComponent().inject(this);
+        setTypeface();
+        getPresenter().subscribe();
+        getPresenter().viewReady();
     }
 }
