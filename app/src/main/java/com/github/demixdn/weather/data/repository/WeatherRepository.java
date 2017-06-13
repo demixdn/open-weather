@@ -1,6 +1,7 @@
 package com.github.demixdn.weather.data.repository;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 
 import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.WeatherEmitter;
@@ -16,7 +17,9 @@ import java.util.List;
  */
 
 public interface WeatherRepository {
+    @UiThread
     void getWeather(@NonNull List<City> cities, @NonNull WeatherEmitter weatherEmitter);
 
+    @UiThread
     void removeWeather(@NonNull City forCity, @NonNull DataCallback<Boolean> approveCallback);
 }

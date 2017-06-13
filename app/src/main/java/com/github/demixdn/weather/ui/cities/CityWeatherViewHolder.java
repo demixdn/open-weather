@@ -59,7 +59,10 @@ final class CityWeatherViewHolder extends RecyclerView.ViewHolder {
         tempField.setText(resources.getString(R.string.degree_celsius, tempInt));
         int iconId = resources.getIdentifier("icon_" + item.getConditionIcon(), "drawable", packageName);
         if (iconId == 0) {
-            iconId = R.drawable.icon_50d;
+            iconId = resources.getIdentifier("icon_" + item.getConditionIcon().replace('n', 'd'), "drawable", packageName);
+            if (iconId == 0) {
+                iconId = R.drawable.icon_50d;
+            }
         }
         weatherIconField.setImageResource(iconId);
     }

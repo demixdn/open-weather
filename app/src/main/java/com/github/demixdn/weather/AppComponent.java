@@ -13,11 +13,12 @@ import com.github.demixdn.weather.data.repository.CitiesRepositoryImpl;
 import com.github.demixdn.weather.data.repository.WeatherRepository;
 import com.github.demixdn.weather.data.repository.WeatherRepositoryImpl;
 import com.github.demixdn.weather.ui.SignInActivity;
-import com.github.demixdn.weather.ui.StartActivity;
+import com.github.demixdn.weather.ui.navigation.StartActivity;
 import com.github.demixdn.weather.ui.addcity.AddCityPresenter;
 import com.github.demixdn.weather.ui.addcity.AddCityView;
 import com.github.demixdn.weather.ui.cities.CitiesPresenter;
 import com.github.demixdn.weather.ui.cities.CitiesView;
+import com.github.demixdn.weather.ui.navigation.StarterPresenter;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,6 +42,7 @@ public final class AppComponent {
     private WeatherRepository weatherRepository;
     private NetworkConnection networkConnection;
     private CitiesPresenter citiesPresenter;
+    private StarterPresenter starterPresenter;
     private JobExecutor jobExecutor;
 
     public AppComponent(@NonNull Context applicationContext) {
@@ -114,15 +116,22 @@ public final class AppComponent {
         return citiesPresenter;
     }
 
+    private StarterPresenter getStarterPresenter() {
+        if (starterPresenter == null) {
+            starterPresenter = new StarterPresenter(getAuthManager(), getCitiesRepository());
+        }
+        return starterPresenter;
+    }
+
     public void inject(SignInActivity signInActivity) {
         signInActivity.setAppTypeface(getAppTypeface());
-        signInActivity.setFacebookLoginDelegate(getAuthManager());
+        signInActivity.setAuthDelegate(getAuthManager());
     }
 
     public void inject(StartActivity startActivity) {
         startActivity.setAppTypeface(getAppTypeface());
-        startActivity.setFacebookLoginDelegate(getAuthManager());
-        startActivity.setCitiesRepository(getCitiesRepository());
+        startActivity.bindPresenter(getStarterPresenter());
+        startActivity.getPresenter().bindView(startActivity);
     }
 
     public void inject(AddCityView view) {

@@ -1,7 +1,7 @@
 package com.github.demixdn.weather.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,16 +24,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private AuthManager authManager;
     private ProgressDialog progressDialog;
 
-    public static void navigate(@NonNull Context context) {
+    public static void navigate(@NonNull Activity context, int requestCode) {
         Intent starter = new Intent(context, SignInActivity.class);
-        context.startActivity(starter);
+        context.startActivityForResult(starter, requestCode);
     }
 
     public void setAppTypeface(@NonNull AppTypeface appTypeface) {
         this.appTypeface = appTypeface;
     }
 
-    public void setFacebookLoginDelegate(@NonNull AuthManager authManager) {
+    public void setAuthDelegate(@NonNull AuthManager authManager) {
         this.authManager = authManager;
     }
 
@@ -54,7 +54,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         tvSignInTitle.setTypeface(appTypeface.get(AppTypeface.Roboto.REGULAR));
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Auth in progress...");
+        progressDialog.setMessage(getString(R.string.auth_progress));
     }
 
     @Override
@@ -92,6 +92,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onAuthSuccess(@NonNull FirebaseUser user) {
         progressDialog.dismiss();
         Toast.makeText(this, getString(R.string.login_success, user.getDisplayName()), Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK, new Intent());
         finish();
     }
 

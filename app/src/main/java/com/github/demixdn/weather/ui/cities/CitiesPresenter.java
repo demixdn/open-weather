@@ -1,5 +1,7 @@
 package com.github.demixdn.weather.ui.cities;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.github.demixdn.weather.data.DataCallback;
@@ -28,9 +30,19 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
     private final WeatherRepository weatherRepository;
     private CitiesWeatherEmitter weatherEmitter;
 
+    private final Handler checkHandler;
+    private final Runnable postRunnable;
+
     public CitiesPresenter(@NonNull CitiesRepository citiesRepository, @NonNull WeatherRepository weatherRepository) {
         this.citiesRepository = citiesRepository;
         this.weatherRepository = weatherRepository;
+        checkHandler = new Handler(Looper.getMainLooper());
+        postRunnable = new Runnable() {
+            @Override
+            public void run() {
+                loadWeather();
+            }
+        };
     }
 
     void loadWeather() {
@@ -38,6 +50,7 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
         if (getView() != null) {
             getView().showProgress();
         }
+        checkHandler.postDelayed(postRunnable, 4000);
         weatherEmitter = new CitiesWeatherEmitter();
         citiesRepository.getUserCities(new DataCallback<List<City>>() {
             @Override
@@ -55,7 +68,7 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
         });
     }
 
-    void onCityRemove(@NonNull City city){
+    void onCityRemove(@NonNull City city) {
         weatherRepository.removeWeather(city, new DataCallback<Boolean>() {
             @Override
             public void onSuccess(@NonNull Boolean aBoolean) {
@@ -96,6 +109,7 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
 
         @Override
         public void onComplete() {
+            checkHandler.removeCallbacks(postRunnable);
             if (getView() != null) {
                 getView().hideProgress();
             }
@@ -103,6 +117,7 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
 
         @Override
         public void onException(@NonNull Exception ex) {
+            checkHandler.removeCallbacks(postRunnable);
             if (getView() != null) {
                 getView().hideProgress();
                 getView().showError(ex.getMessage());

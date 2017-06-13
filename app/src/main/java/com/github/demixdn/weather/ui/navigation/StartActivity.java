@@ -1,8 +1,10 @@
-package com.github.demixdn.weather.ui;
+package com.github.demixdn.weather.ui.navigation;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -19,29 +21,21 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
-import com.github.demixdn.weather.data.DataCallback;
-import com.github.demixdn.weather.data.auth.AuthManager;
-import com.github.demixdn.weather.data.model.City;
-import com.github.demixdn.weather.data.repository.CitiesRepository;
 import com.github.demixdn.weather.ui.cities.EmptyCitiesFragment;
 import com.github.demixdn.weather.ui.transformation.CropCircleTransformation;
 import com.github.demixdn.weather.utils.AppTypeface;
-import com.github.demixdn.weather.utils.Logger;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.List;
-
 public class StartActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
+        implements StartView, NavigationView.OnNavigationItemSelectedListener,
         EmptyCitiesFragment.OnCityAddClickListener {
 
 
+    private static final int REQUEST_CODE_SIGN = 1001;
     private static final int INDEX_CITY = 0;
     private static final int INDEX_PROFILE = 1;
     private static final int INDEX_ABOUT = 2;
     private AppTypeface appTypeface;
-    private AuthManager authManager;
-    private CitiesRepository citiesRepository;
     private NavigationView navigationView;
     private FloatingActionButton fabAddCity;
     private TextView tvUserName;
@@ -51,29 +45,22 @@ public class StartActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
 
     private Navigator navigator;
-    private DataCallback<List<City>> citiesCallback;
+
+    private StarterPresenter presenter;
 
 
     public void setAppTypeface(@NonNull AppTypeface appTypeface) {
         this.appTypeface = appTypeface;
     }
 
-    public void setFacebookLoginDelegate(@NonNull AuthManager facebookLogin) {
-        this.authManager = facebookLogin;
-    }
-
-    public void setCitiesRepository(CitiesRepository citiesRepository) {
-        this.citiesRepository = citiesRepository;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        App.getInstance().getAppComponent().inject(this);
         initUI();
-        fragmentManager = getSupportFragmentManager();
-        navigator = new Navigator();
+        initComponents();
+        App.getInstance().getAppComponent().inject(this);
+        setTypeface();
     }
 
     private void initUI() {
@@ -101,70 +88,26 @@ public class StartActivity extends AppCompatActivity
         tvUserEmail = (TextView) header.findViewById(R.id.tvUserEmail);
         ivUser = (ImageView) header.findViewById(R.id.ivUserPhoto);
 
-        tvUserName.setTypeface(appTypeface.get(AppTypeface.Roboto.REGULAR));
-        tvUserEmail.setTypeface(appTypeface.get(AppTypeface.Roboto.REGULAR));
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Get Cities in progress");
+        progressDialog.setMessage(getString(R.string.cities_progress));
         progressDialog.setCancelable(false);
     }
 
+    private void initComponents() {
+        fragmentManager = getSupportFragmentManager();
+        navigator = new Navigator();
+    }
+
+    private void setTypeface() {
+        tvUserName.setTypeface(appTypeface.get(AppTypeface.Roboto.REGULAR));
+        tvUserEmail.setTypeface(appTypeface.get(AppTypeface.Roboto.REGULAR));
+    }
+
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (!authManager.isLogged()) {
-            navigator.showSignIn(this);
-        } else {
-            showUserInfo();
-            showCitiesForUser();
-        }
-    }
-
-    private void showUserInfo() {
-        FirebaseUser user = authManager.getActiveUser();
-        if (user != null) {
-            showUserInfoOnHeader(user);
-        }
-    }
-
-    private void showCitiesForUser() {
-        progressDialog.show();
-        citiesCallback = new DataCallback<List<City>>() {
-            @Override
-            public void onSuccess(@NonNull List<City> cities) {
-                Logger.d(cities.toString());
-                progressDialog.dismiss();
-                if (cities.isEmpty()) {
-                    showEmptyState();
-                } else {
-                    showCities();
-                }
-            }
-
-            @Override
-            public void onException(@NonNull Exception ex) {
-                progressDialog.dismiss();
-                Logger.e(ex);
-                showEmptyState();
-            }
-        };
-        citiesRepository.getUserCities(citiesCallback);
-    }
-
-    private void showUserInfoOnHeader(@NonNull FirebaseUser user) {
-        tvUserName.setText(user.getDisplayName());
-        tvUserEmail.setText(user.getEmail());
-        int size = getResources().getDimensionPixelSize(R.dimen.header_user_icon_size);
-        Glide.with(this)
-                .load(user.getPhotoUrl())
-                .override(size, size)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .placeholder(R.drawable.ic_person)
-                .error(R.drawable.ic_person)
-                .crossFade()
-                .into(ivUser);
-
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getPresenter().viewReady();
     }
 
     @Override
@@ -207,11 +150,11 @@ public class StartActivity extends AppCompatActivity
         }
     }
 
-    private void showCities() {
+    @Override
+    public void showCities() {
         navigationView.getMenu().getItem(INDEX_CITY).setChecked(true);
         fabShow();
         navigator.showCities(fragmentManager);
-        citiesCallback = null;
     }
 
     private void showAppInfo() {
@@ -227,7 +170,28 @@ public class StartActivity extends AppCompatActivity
     }
 
 
-    private void showEmptyState() {
+    @Override
+    public void showLoginScreen() {
+        navigator.showSignIn(this, REQUEST_CODE_SIGN);
+    }
+
+    @Override
+    public void showUser(@NonNull FirebaseUser user) {
+        tvUserName.setText(user.getDisplayName());
+        tvUserEmail.setText(user.getEmail());
+        int size = getResources().getDimensionPixelSize(R.dimen.header_user_icon_size);
+        Glide.with(this)
+                .load(user.getPhotoUrl())
+                .override(size, size)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .crossFade()
+                .into(ivUser);
+    }
+
+    @Override
+    public void showEmptyState() {
         navigationView.getMenu().getItem(INDEX_CITY).setChecked(true);
         fabHide();
         navigator.showEmptyState(fragmentManager);
@@ -236,5 +200,28 @@ public class StartActivity extends AppCompatActivity
     @Override
     public void onCityAddClick() {
         navigator.showAddCity(this);
+    }
+
+    @Override
+    public void bindPresenter(StarterPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public StarterPresenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_SIGN) {
+            if (resultCode == RESULT_OK) {
+                getPresenter().viewReady();
+            } else {
+                finish();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

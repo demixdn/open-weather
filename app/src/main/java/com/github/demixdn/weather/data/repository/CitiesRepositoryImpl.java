@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.auth.AuthManager;
 import com.github.demixdn.weather.data.model.City;
+import com.github.demixdn.weather.utils.Logger;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,15 +32,17 @@ import java.util.concurrent.Executors;
 public class CitiesRepositoryImpl implements CitiesRepository {
 
     private final Resources resources;
-    @NonNull
-    private final AuthManager authManager;
-
-    private final DatabaseReference databaseReference;
+    private final DatabaseReference userReference;
+    private CitiesValueEventListener valueEventListener;
 
     public CitiesRepositoryImpl(@NonNull Resources resources, @NonNull AuthManager authManager) {
         this.resources = resources;
-        this.authManager = authManager;
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser currentUser = authManager.getActiveUser();
+        if (currentUser == null) {
+            userReference = null;
+        } else {
+            userReference = FirebaseDatabase.getInstance().getReference().child(currentUser.getUid());
+        }
     }
 
     @Override
@@ -50,12 +53,9 @@ public class CitiesRepositoryImpl implements CitiesRepository {
 
     @Override
     public void addUserCity(@NonNull final String cityNameCountry, @NonNull final DataCallback<Boolean> approveCallback) {
-        FirebaseUser currentUser = authManager.getActiveUser();
-        if (currentUser == null) {
+        if (userReference == null) {
             sendFalse(approveCallback);
         } else {
-            DatabaseReference userReference = databaseReference.child(currentUser.getUid());
-            userReference.keepSynced(true);
             String key = userReference.push().getKey();
             HashMap<String, Object> cityMap = new HashMap<>();
             cityMap.put(key, cityNameCountry);
@@ -65,23 +65,33 @@ public class CitiesRepositoryImpl implements CitiesRepository {
 
     @Override
     public void removeUserCity(@NonNull final String cityNameCountry, @NonNull final DataCallback<Boolean> approveCallback) {
-        FirebaseUser currentUser = authManager.getActiveUser();
-        if (currentUser == null) {
+        if (userReference == null) {
             sendFalse(approveCallback);
         } else {
-            DatabaseReference userReference = databaseReference.child(currentUser.getUid());
             userReference.addListenerForSingleValueEvent(new RemoveCityValueEventListener(cityNameCountry, approveCallback));
         }
     }
 
     @Override
     public void getUserCities(@NonNull final DataCallback<List<City>> callback) {
-        FirebaseUser currentUser = authManager.getActiveUser();
-        if (currentUser == null) {
+        if (userReference == null) {
             callback.onSuccess(Collections.<City>emptyList());
         } else {
-            DatabaseReference userReference = databaseReference.child(currentUser.getUid());
-            userReference.addValueEventListener(new CitiesValueEventListener(callback));
+            if (valueEventListener != null) {
+                userReference.removeEventListener(valueEventListener);
+            }
+            valueEventListener = new CitiesValueEventListener(callback);
+            userReference.addValueEventListener(valueEventListener);
+        }
+    }
+
+    @Override
+    public void subscribeToCityChanges(@NonNull DataCallback<List<City>> callback) {
+        if (userReference == null) {
+            callback.onSuccess(Collections.<City>emptyList());
+        } else {
+            ValueEventListener valueEventListener = new CitiesValueEventListener(callback);
+            userReference.addValueEventListener(valueEventListener);
         }
     }
 
@@ -99,7 +109,7 @@ public class CitiesRepositoryImpl implements CitiesRepository {
         @Override
         public void onComplete(ParseResult parseResult) {
             List<String> cities = parseResult.cities;
-            if(callback !=null) {
+            if (callback != null) {
                 callback.onSuccess(cities);
             }
         }
@@ -142,6 +152,7 @@ public class CitiesRepositoryImpl implements CitiesRepository {
                     cities.add(cityToAdd);
                 }
             }
+            Logger.d("CitiesRepo", "Cities changed :: " + cities.toString());
             DataCallback<List<City>> dataCallback = callback.get();
             if (dataCallback != null) {
                 dataCallback.onSuccess(cities);

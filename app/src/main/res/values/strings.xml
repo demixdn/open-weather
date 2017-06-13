@@ -63,4 +63,6 @@
     <string name="developer_email">Email: demixdn@gmail.com</string>
     <string name="developer_name">Aleksandr Pluzhnik</string>
     <string name="developer_title">Developer</string>
+    <string name="auth_progress">Auth in progress...</string>
+    <string name="cities_progress">Get cities in progress...</string>
 </resources>

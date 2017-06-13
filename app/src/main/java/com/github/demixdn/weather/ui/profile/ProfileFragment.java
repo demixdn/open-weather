@@ -1,4 +1,4 @@
-package com.github.demixdn.weather.ui;
+package com.github.demixdn.weather.ui.profile;
 
 
 import android.os.Bundle;

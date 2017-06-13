@@ -28,4 +28,7 @@ public interface CitiesRepository {
 
     @UiThread
     void getUserCities(@NonNull DataCallback<List<City>> callback);
+
+    @UiThread
+    void subscribeToCityChanges(@NonNull DataCallback<List<City>> callback);
 }
