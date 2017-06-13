@@ -2,6 +2,7 @@ package com.github.demixdn.weather.ui.navigation;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,12 +19,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
 import com.github.demixdn.weather.ui.cities.EmptyCitiesFragment;
-import com.github.demixdn.weather.ui.transformation.CropCircleTransformation;
 import com.github.demixdn.weather.utils.AppTypeface;
+import com.github.demixdn.weather.utils.ImageHelper;
 import com.google.firebase.auth.FirebaseUser;
 
 public class StartActivity extends AppCompatActivity
@@ -180,14 +180,8 @@ public class StartActivity extends AppCompatActivity
         tvUserName.setText(user.getDisplayName());
         tvUserEmail.setText(user.getEmail());
         int size = getResources().getDimensionPixelSize(R.dimen.header_user_icon_size);
-        Glide.with(this)
-                .load(user.getPhotoUrl())
-                .override(size, size)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .placeholder(R.drawable.ic_person)
-                .error(R.drawable.ic_person)
-                .crossFade()
-                .into(ivUser);
+        Uri userPhotoUrl = user.getPhotoUrl();
+        ImageHelper.loadUserPhoto(this, size, userPhotoUrl, ivUser);
     }
 
     @Override

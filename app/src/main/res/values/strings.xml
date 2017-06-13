@@ -65,4 +65,5 @@
     <string name="developer_title">Developer</string>
     <string name="auth_progress">Auth in progress...</string>
     <string name="cities_progress">Get cities in progress...</string>
+    <string name="log_out_button">Log out</string>
 </resources>

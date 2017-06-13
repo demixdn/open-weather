@@ -3,11 +3,11 @@ package com.github.demixdn.weather.ui.navigation;
 import android.support.annotation.NonNull;
 
 import com.github.demixdn.weather.data.DataCallback;
-import com.github.demixdn.weather.data.auth.AuthManager;
 import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.repository.CitiesRepository;
 import com.github.demixdn.weather.ui.base.BasePresenter;
 import com.github.demixdn.weather.utils.Logger;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
@@ -21,12 +21,12 @@ import java.util.List;
 
 public final class StarterPresenter extends BasePresenter<StartView> {
 
-    private final AuthManager authManager;
+    private final FirebaseAuth authManager;
     private final CitiesRepository citiesRepository;
     private final DataCallback<List<City>> citiesCallback;
 
-    public StarterPresenter(@NonNull AuthManager authManager, @NonNull CitiesRepository citiesRepository) {
-        this.authManager = authManager;
+    public StarterPresenter(@NonNull FirebaseAuth firebaseAuth, @NonNull CitiesRepository citiesRepository) {
+        this.authManager = firebaseAuth;
         this.citiesRepository = citiesRepository;
         citiesCallback = new DataCallback<List<City>>() {
             @Override
@@ -49,16 +49,22 @@ public final class StarterPresenter extends BasePresenter<StartView> {
             }
         };
         this.citiesRepository.subscribeToCityChanges(citiesCallback);
+        this.authManager.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = authManager.getCurrentUser();
+                if (user == null) {
+                    if (getView() != null) {
+                        getView().showLoginScreen();
+                    }
+                } else if (getView() != null) {
+                    getView().showUser(user);
+                }
+            }
+        });
     }
 
     void viewReady() {
-        FirebaseUser user = authManager.getActiveUser();
-        assert getView() != null;
-        if (user == null) {
-            getView().showLoginScreen();
-            return;
-        }
-        getView().showUser(user);
         citiesRepository.getUserCities(citiesCallback);
     }
 }

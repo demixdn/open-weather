@@ -19,6 +19,8 @@ import com.github.demixdn.weather.ui.addcity.AddCityView;
 import com.github.demixdn.weather.ui.cities.CitiesPresenter;
 import com.github.demixdn.weather.ui.cities.CitiesView;
 import com.github.demixdn.weather.ui.navigation.StarterPresenter;
+import com.github.demixdn.weather.ui.profile.ProfileFragment;
+import com.github.demixdn.weather.ui.profile.ProfilePresenter;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -43,6 +45,7 @@ public final class AppComponent {
     private NetworkConnection networkConnection;
     private CitiesPresenter citiesPresenter;
     private StarterPresenter starterPresenter;
+    private ProfilePresenter profilePresenter;
     private JobExecutor jobExecutor;
 
     public AppComponent(@NonNull Context applicationContext) {
@@ -116,11 +119,18 @@ public final class AppComponent {
         return citiesPresenter;
     }
 
-    private StarterPresenter getStarterPresenter() {
+    private synchronized StarterPresenter getStarterPresenter() {
         if (starterPresenter == null) {
-            starterPresenter = new StarterPresenter(getAuthManager(), getCitiesRepository());
+            starterPresenter = new StarterPresenter(FirebaseAuth.getInstance(), getCitiesRepository());
         }
         return starterPresenter;
+    }
+
+    private synchronized ProfilePresenter getProfilePresenter() {
+        if (profilePresenter == null) {
+            profilePresenter = new ProfilePresenter(getAuthManager());
+        }
+        return profilePresenter;
     }
 
     public void inject(SignInActivity signInActivity) {
@@ -142,5 +152,11 @@ public final class AppComponent {
     public void inject(CitiesView view) {
         view.bindPresenter(getCitiesPresenter());
         view.getPresenter().bindView(view);
+    }
+
+    public void inject(ProfileFragment profileFragment) {
+        profileFragment.setAppTypeface(getAppTypeface());
+        profileFragment.bindPresenter(getProfilePresenter());
+        profileFragment.getPresenter().bindView(profileFragment);
     }
 }
