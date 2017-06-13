@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="colorMaterial50">#e4e4e4</color>
+    <color name="colorMaterial100">#bcbcbc</color>
+    <color name="colorMaterial200">#909090</color>
+    <color name="colorMaterial300">#646464</color>
+    <color name="colorMaterial400">#424242</color>
+    <color name="colorMaterial500">#212121</color>
+    <color name="colorMaterial600">#1d1d1d</color>
+    <color name="colorMaterial700">#181818</color>
+    <color name="colorMaterial800">#141414</color>
+    <color name="colorMaterial900">#0b0b0b</color>
+
     <color name="colorPrimaryLight">#484848</color>
     <color name="colorPrimary">#212121</color>
     <color name="colorPrimaryDark">#000000</color>

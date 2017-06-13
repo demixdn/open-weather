@@ -2,9 +2,11 @@ package com.github.demixdn.weather.data.repository;
 
 import android.support.annotation.NonNull;
 
+import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.WeatherEmitter;
 import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.network.NetworkConnection;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -49,6 +51,21 @@ public class WeatherRepositoryImpl implements WeatherRepository {
             dispatcherWeatherEmitter.putCity(city);
             cityReference.addValueEventListener(getWeatherValueListener);
         }
+    }
+
+    @Override
+    public void removeWeather(@NonNull City forCity, @NonNull final DataCallback<Boolean> approveCallback) {
+        final DatabaseReference cityReference = database.child(forCity.toDatabaseKey());
+        cityReference.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    approveCallback.onException(databaseError.toException());
+                } else {
+                    approveCallback.onSuccess(true);
+                }
+            }
+        });
     }
 
 }

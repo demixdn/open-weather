@@ -24,7 +24,7 @@
     <!--START Default strings -->
     <string name="test_day_name">Fri</string>
     <string name="test_description">Few clouds</string>
-    <string name="test_degree_celsius">6 &#8451;</string>
+    <string name="test_degree_celsius">36 &#8451;</string>
     <string name="test_degree_celsius_long">Temperature 7 &#8451;</string>
     <string name="test_pressure">Pressure 740 mm</string>
     <string name="test_humidity">Humidity 90</string>

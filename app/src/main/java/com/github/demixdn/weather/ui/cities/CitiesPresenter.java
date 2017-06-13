@@ -55,6 +55,31 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
         });
     }
 
+    void onCityRemove(@NonNull City city){
+        weatherRepository.removeWeather(city, new DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(@NonNull Boolean aBoolean) {
+                Logger.d(this, aBoolean ? "Weather for city removed" : "City not removed");
+            }
+
+            @Override
+            public void onException(@NonNull Exception ex) {
+                Logger.e("Weather for city remove exception", ex);
+            }
+        });
+        citiesRepository.removeUserCity(city.toAppString(), new DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(@NonNull Boolean aBoolean) {
+                Logger.d(this, aBoolean ? "City removed" : "City not removed");
+            }
+
+            @Override
+            public void onException(@NonNull Exception ex) {
+                Logger.e("City remove exception", ex);
+            }
+        });
+    }
+
     @Override
     public void unbindView() {
         weatherEmitter = null;

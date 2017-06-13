@@ -12,7 +12,7 @@ import java.util.Calendar;
  */
 
 public class Weather {
-    private final long THREE_HOUR_IN_SECONDS = 3 * 60 * 60L;
+    private final static long EVICTED_PERIOD = 2 * 60 * 60L;
 
     private City city;
     private String conditionTitle;
@@ -127,7 +127,7 @@ public class Weather {
     public boolean isEvicted() {
         long currentInSeconds = Calendar.getInstance().getTimeInMillis() / 1000L;
         long diffInSec = currentInSeconds - weatherTimeInSeconds;
-        return diffInSec > THREE_HOUR_IN_SECONDS;
+        return diffInSec > EVICTED_PERIOD;
     }
 
     @Override
