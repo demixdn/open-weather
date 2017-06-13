@@ -37,6 +37,14 @@
             android:name=".ui.addcity.AddCityActivity"
             android:label="@string/add_your_city">
         </activity>
+        <activity
+            android:name=".ui.detail.DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key"/>
     </application>
 
 </manifest>

@@ -22,7 +22,9 @@ import android.widget.TextView;
 import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.R;
 import com.github.demixdn.weather.data.Observer;
+import com.github.demixdn.weather.data.model.Weather;
 import com.github.demixdn.weather.ui.cities.EmptyCitiesFragment;
+import com.github.demixdn.weather.ui.cities.WeatherItemClickListener;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.github.demixdn.weather.utils.ImageHelper;
 import com.github.demixdn.weather.utils.Logger;
@@ -31,7 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class StartActivity extends AppCompatActivity
         implements StartView, NavigationView.OnNavigationItemSelectedListener,
-        EmptyCitiesFragment.OnCityAddClickListener, Observer {
+        EmptyCitiesFragment.OnCityAddClickListener, Observer, WeatherItemClickListener {
 
 
     private static final int REQUEST_CODE_SIGN = 1001;
@@ -238,5 +240,10 @@ public class StartActivity extends AppCompatActivity
         setTypeface();
         getPresenter().subscribe();
         getPresenter().viewReady();
+    }
+
+    @Override
+    public void onWeatherItemClicked(@NonNull Weather item) {
+        navigator.showDetail(this, item);
     }
 }

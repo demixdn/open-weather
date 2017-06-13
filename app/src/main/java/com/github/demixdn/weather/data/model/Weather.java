@@ -2,6 +2,7 @@ package com.github.demixdn.weather.data.model;
 
 import com.github.demixdn.weather.utils.Logger;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Calendar;
  * @author Aleks Sander
  */
 
-public class Weather {
+public class Weather implements Serializable {
     private final static long EVICTED_PERIOD = 2 * 60 * 60L;
 
     private City city;

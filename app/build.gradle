@@ -27,7 +27,6 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.releaseConfig
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false;
@@ -54,6 +53,7 @@ dependencies {
     compile "com.google.firebase:firebase-database:$gmsVersion"
     compile "com.google.firebase:firebase-auth:$gmsVersion"
     compile "com.google.android.gms:play-services-auth:$gmsVersion"
+    compile "com.google.android.gms:play-services-maps:$gmsVersion"
 
     compile 'com.facebook.android:facebook-android-sdk:4.23.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'

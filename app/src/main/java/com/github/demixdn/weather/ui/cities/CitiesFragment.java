@@ -2,6 +2,7 @@ package com.github.demixdn.weather.ui.cities;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -43,6 +44,7 @@ public class CitiesFragment extends Fragment implements CitiesView, CityRemoveLi
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private CityWeatherAdapter adapter;
+    private WeatherItemClickListener weatherItemClickListener;
 
     private ProgressDialog progressDialog;
 
@@ -50,6 +52,15 @@ public class CitiesFragment extends Fragment implements CitiesView, CityRemoveLi
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof WeatherItemClickListener){
+            weatherItemClickListener = (WeatherItemClickListener)context;
+        } else {
+            throw new IllegalArgumentException("Parent must implemented WeatherItemClickListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,7 +105,7 @@ public class CitiesFragment extends Fragment implements CitiesView, CityRemoveLi
     }
 
     private void initAdapter() {
-        adapter = new CityWeatherAdapter(new ArrayList<Weather>(), this);
+        adapter = new CityWeatherAdapter(new ArrayList<Weather>(), this, weatherItemClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);

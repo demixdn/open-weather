@@ -26,6 +26,8 @@ final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolde
 
     @NonNull
     private final CityRemoveListener cityRemoveListener;
+    @NonNull
+    private final WeatherItemClickListener clickListener;
     private List<Weather> items;
     private List<Weather> itemsPendingRemoval;
 
@@ -33,9 +35,10 @@ final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolde
     private final Map<String, Runnable> pendingRunnables;
 
 
-    CityWeatherAdapter(@NonNull List<Weather> items, @NonNull CityRemoveListener removeListener) {
+    CityWeatherAdapter(@NonNull List<Weather> items, @NonNull CityRemoveListener removeListener, @NonNull WeatherItemClickListener clickListener) {
         this.items = items;
         cityRemoveListener = removeListener;
+        this.clickListener = clickListener;
         handler = new Handler();
         pendingRunnables = new HashMap<>();
         itemsPendingRemoval = new ArrayList<>();
@@ -43,17 +46,21 @@ final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolde
 
     @Override
     public CityWeatherViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new CityWeatherViewHolder(parent);
+        return new CityWeatherViewHolder(parent, clickListener);
     }
 
     @Override
     public void onBindViewHolder(CityWeatherViewHolder holder, int position) {
-        final Weather item = items.get(position);
+        final Weather item = getItem(position);
         if (itemsPendingRemoval.contains(item)) {
             holder.undoState(new RemoveOnClickListener(item));
         } else {
             holder.normalState(item);
         }
+    }
+
+    public Weather getItem(int position) {
+        return items.get(position);
     }
 
     @Override

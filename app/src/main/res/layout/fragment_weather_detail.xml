@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/colorPrimary"
+             tools:context="com.github.demixdn.weather.ui.detail.WeatherDetailFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivCurrentWeatherIcon"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:src="@drawable/icon_02d"
+            tools:ignore="ContentDescription"/>
+
+        <TextView
+            android:id="@+id/tvCurrentWeatherTemp"
+            style="@style/CurrentSubText"
+            android:text="@string/test_degree_celsius"
+            android:textSize="34sp"/>
+
+        <TextView
+            android:id="@+id/tvCurrentWeatherTempMinMax"
+            style="@style/CurrentSubText"
+            android:text="@string/test_temp_min_max"/>
+
+        <TextView
+            android:id="@+id/tvCurrentWeatherDescription"
+            style="@style/CurrentSubText"
+            android:text="@string/test_description"/>
+
+        <TextView
+            android:id="@+id/tvCurrentWeatherPressure"
+            style="@style/CurrentPressHum"
+            android:text="@string/test_pressure"/>
+
+        <TextView
+            android:id="@+id/tvCurrentWeatherHumidity"
+            style="@style/CurrentPressHum"
+            android:text="@string/test_humidity"/>
+    </LinearLayout>
+</FrameLayout>

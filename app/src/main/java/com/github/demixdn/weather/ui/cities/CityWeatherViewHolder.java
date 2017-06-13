@@ -30,16 +30,24 @@ final class CityWeatherViewHolder extends RecyclerView.ViewHolder {
     private final Resources resources;
     private final String packageName;
     private final Button undoButton;
+    private final WeatherItemClickListener clickListener;
 
 
-    CityWeatherViewHolder(ViewGroup parentView) {
+    CityWeatherViewHolder(ViewGroup parentView, final WeatherItemClickListener clickListener) {
         super(LayoutInflater.from(parentView.getContext()).inflate(R.layout.view_city_item, parentView, false));
+        this.clickListener = clickListener;
         resources = itemView.getResources();
         cityTitleField = (TextView) itemView.findViewById(R.id.tvCityItemTitle);
         tempField = (TextView) itemView.findViewById(R.id.tvCityItemTemp);
         weatherIconField = (ImageView) itemView.findViewById(R.id.ivCityItemCondition);
         packageName = itemView.getContext().getPackageName();
         contentView = itemView.findViewById(R.id.llCityContent);
+        contentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.onWeatherItemClicked((Weather) v.getTag());
+            }
+        });
         undoButton = (Button) itemView.findViewById(R.id.btCityItemRemoveUndo);
     }
 
@@ -49,7 +57,7 @@ final class CityWeatherViewHolder extends RecyclerView.ViewHolder {
         contentView.setVisibility(View.VISIBLE);
         undoButton.setVisibility(View.GONE);
         undoButton.setOnClickListener(null);
-
+        contentView.setTag(item);
         applyItem(item);
     }
 
