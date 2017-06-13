@@ -11,6 +11,9 @@ import com.google.firebase.auth.FirebaseUser;
  * @author Aleks Sander
  */
 public interface LoginCallback {
+
+    void showProgress();
+
     void onAuthSuccess(@NonNull FirebaseUser user);
 
     void onAuthError(Exception ex);

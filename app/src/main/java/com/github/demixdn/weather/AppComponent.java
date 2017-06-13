@@ -6,14 +6,22 @@ import android.support.annotation.NonNull;
 
 import com.github.demixdn.weather.data.auth.AuthManager;
 import com.github.demixdn.weather.data.auth.AuthManagerImpl;
+import com.github.demixdn.weather.data.executor.JobExecutor;
+import com.github.demixdn.weather.data.network.NetworkConnection;
 import com.github.demixdn.weather.data.repository.CitiesRepository;
 import com.github.demixdn.weather.data.repository.CitiesRepositoryImpl;
+import com.github.demixdn.weather.data.repository.WeatherRepository;
+import com.github.demixdn.weather.data.repository.WeatherRepositoryImpl;
 import com.github.demixdn.weather.ui.SignInActivity;
 import com.github.demixdn.weather.ui.StartActivity;
 import com.github.demixdn.weather.ui.addcity.AddCityPresenter;
 import com.github.demixdn.weather.ui.addcity.AddCityView;
+import com.github.demixdn.weather.ui.cities.CitiesPresenter;
+import com.github.demixdn.weather.ui.cities.CitiesView;
 import com.github.demixdn.weather.utils.AppTypeface;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.concurrent.Executor;
 
 /**
  * Created on 06.06.2017
@@ -29,7 +37,11 @@ public final class AppComponent {
     private AuthManager authManager;
     private AddCityPresenter addCityPresenter;
     private Resources resources;
-    private CitiesRepositoryImpl citiesRepository;
+    private CitiesRepository citiesRepository;
+    private WeatherRepository weatherRepository;
+    private NetworkConnection networkConnection;
+    private CitiesPresenter citiesPresenter;
+    private JobExecutor jobExecutor;
 
     public AppComponent(@NonNull Context applicationContext) {
         this.applicationContext = applicationContext;
@@ -74,6 +86,34 @@ public final class AppComponent {
         return resources;
     }
 
+    private synchronized NetworkConnection getNetworkConnection() {
+        if (networkConnection == null) {
+            networkConnection = new NetworkConnection();
+        }
+        return networkConnection;
+    }
+
+    private synchronized Executor getExecutor() {
+        if (jobExecutor == null) {
+            jobExecutor = new JobExecutor();
+        }
+        return jobExecutor;
+    }
+
+    private synchronized WeatherRepository getWeatherRepository() {
+        if (weatherRepository == null) {
+            weatherRepository = new WeatherRepositoryImpl(getNetworkConnection(), getExecutor());
+        }
+        return weatherRepository;
+    }
+
+    private synchronized CitiesPresenter getCitiesPresenter() {
+        if (citiesPresenter == null) {
+            citiesPresenter = new CitiesPresenter(getCitiesRepository(), getWeatherRepository());
+        }
+        return citiesPresenter;
+    }
+
     public void inject(SignInActivity signInActivity) {
         signInActivity.setAppTypeface(getAppTypeface());
         signInActivity.setFacebookLoginDelegate(getAuthManager());
@@ -87,6 +127,11 @@ public final class AppComponent {
 
     public void inject(AddCityView view) {
         view.bindPresenter(getAddCityPresenter());
+        view.getPresenter().bindView(view);
+    }
+
+    public void inject(CitiesView view) {
+        view.bindPresenter(getCitiesPresenter());
         view.getPresenter().bindView(view);
     }
 }

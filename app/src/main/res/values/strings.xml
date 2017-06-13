@@ -11,7 +11,9 @@
 
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">Cancel</string>
+    <string name="dialog_action_retry">Retry</string>
     <string name="dialog_error_title">Sorry</string>
+    <string name="dialog_error_default_message_retry">Failed to get data. Try again?</string>
 
     <!--START Exception messages -->
     <string name="exception_message_generic">There was an application error</string>
@@ -46,10 +48,14 @@
     <string name="profile">Profile</string>
     <string name="about">About</string>
 
+    <string name="login_success">You are logged in as %s</string>
+    <string name="login_error">Authorization error</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_state_city">There is no city to track the weather.\nAdd your city.</string>
     <string name="enter_your_city">Please enter your City</string>
     <string name="choose_your_city">Choose your city</string>
     <string name="long_city_title">Long City Title, AU</string>
+    <string name="button_undo">Undo</string>
 </resources>

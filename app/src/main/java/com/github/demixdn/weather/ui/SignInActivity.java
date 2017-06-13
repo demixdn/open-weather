@@ -54,7 +54,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         tvSignInTitle.setTypeface(appTypeface.get(AppTypeface.Roboto.REGULAR));
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Auth in progress");
+        progressDialog.setMessage("Auth in progress...");
     }
 
     @Override
@@ -75,7 +75,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void loginAction() {
         authManager.login(this);
-        progressDialog.show();
     }
 
     @Override
@@ -85,15 +84,20 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
+    public void showProgress() {
+        progressDialog.show();
+    }
+
+    @Override
     public void onAuthSuccess(@NonNull FirebaseUser user) {
         progressDialog.dismiss();
-        Toast.makeText(this, "Auth success " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.login_success, user.getDisplayName()), Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void onAuthError(Exception ex) {
         progressDialog.dismiss();
-        Toast.makeText(this, "Auth error", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.login_error, Toast.LENGTH_SHORT).show();
     }
 }

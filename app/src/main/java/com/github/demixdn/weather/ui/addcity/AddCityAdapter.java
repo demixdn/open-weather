@@ -70,7 +70,6 @@ class AddCityAdapter extends BaseAdapter implements Filterable {
     public void destroyData() {
         originalData = null;
         filteredData = null;
-        System.gc();
     }
 
     private static class ViewHolder {

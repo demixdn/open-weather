@@ -47,6 +47,7 @@ public class StartActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
 
     private Navigator navigator;
+    private DataCallback<List<City>> citiesCallback;
 
 
     public void setAppTypeface(@NonNull AppTypeface appTypeface) {
@@ -125,7 +126,7 @@ public class StartActivity extends AppCompatActivity
 
     private void showCitiesForUser() {
         progressDialog.show();
-        citiesRepository.getUserCities(new DataCallback<List<City>>() {
+        citiesCallback = new DataCallback<List<City>>() {
             @Override
             public void onSuccess(@NonNull List<City> cities) {
                 Logger.d(cities.toString());
@@ -143,11 +144,14 @@ public class StartActivity extends AppCompatActivity
                 Logger.e(ex);
                 showEmptyState();
             }
-        });
+        };
+        citiesRepository.getUserCities(citiesCallback);
     }
 
     private void showCities() {
+        fabShow();
         navigator.showCities(fragmentManager);
+        citiesCallback = null;
     }
 
     private void showUserInfoOnHeader(@NonNull FirebaseUser user) {
@@ -193,16 +197,31 @@ public class StartActivity extends AppCompatActivity
         return true;
     }
 
+    private void fabShow() {
+        if (!fabAddCity.isShown()) {
+            fabAddCity.show();
+        }
+    }
+
+    private void fabHide() {
+        if (fabAddCity.isShown()) {
+            fabAddCity.hide();
+        }
+    }
+
     private void showAppInfo() {
+        fabHide();
         navigator.showInfo(fragmentManager);
     }
 
     private void showProfile() {
+        fabHide();
         navigator.showProfile(fragmentManager);
     }
 
 
     private void showEmptyState() {
+        fabHide();
         navigator.showEmptyState(fragmentManager);
     }
 

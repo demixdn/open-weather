@@ -13,6 +13,7 @@ public class NetworkException extends Exception {
     public static final int HTTP_FORBIDDEN = 403;
     public static final int HTTP_NOT_FOUND = 404;
     public static final int HTTP_CLIENT_TIMEOUT = 408;
+    public static final int HTTP_TOO_MANY_REQUESTS = 429;
     public static final int HTTP_INTERNAL_ERROR = 500;
     public static final int HTTP_BAD_GATEWAY = 502;
     public static final int HTTP_UNAVAILABLE = 503;
@@ -41,6 +42,8 @@ public class NetworkException extends Exception {
                 return "HTTP Status-Code 404: Not Found";
             case HTTP_CLIENT_TIMEOUT:
                 return "HTTP Status-Code 408: Request Time-Out";
+            case HTTP_TOO_MANY_REQUESTS:
+                return "HTTP Status-Code 429: Too Many Requests";
             case HTTP_INTERNAL_ERROR:
                 return "HTTP Status-Code 500: Internal Server Error";
             case HTTP_BAD_GATEWAY:

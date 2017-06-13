@@ -5,19 +5,19 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import com.github.demixdn.weather.utils.IOUtils;
+import com.github.demixdn.weather.utils.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created on 11.06.2017 in open-weather
@@ -30,30 +30,51 @@ public class NetworkConnection {
     private static final int CONNECT_TIMEOUT = 10000;//millis
     private static final int READ_TIMEOUT = 10000;//millis
 
+    private int checkAppIdCount = 0;
+
     @WorkerThread
     @Nullable
     public String getWeatherByCity(@NonNull String cityName, @NonNull String appId,
                                    @NonNull String units, @Nullable String lang)
             throws IOException, URISyntaxException, NetworkException {
+        Logger.d("Param city " + cityName);
         URL targetUrl = getWeatherUrl(cityName, appId, units, lang);
         HttpURLConnection urlConnection = createGetConnection(targetUrl);
         try {
             urlConnection.connect();
-            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            int responseCode = urlConnection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                checkAppIdCount = 0;
                 InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
                 return IOUtils.getStringFrom(inputStream, IOUtils.ENCODING_UTF_8);
+            } else if (responseCode == NetworkException.HTTP_TOO_MANY_REQUESTS) {
+                return connectWithReserveAppId(cityName, units, lang, responseCode);
             } else {
-                throw new NetworkException(urlConnection.getResponseCode());
+                checkAppIdCount = 0;
+                throw new NetworkException(responseCode);
             }
         } finally {
             urlConnection.disconnect();
         }
     }
 
+    private String connectWithReserveAppId(@NonNull String cityName, @NonNull String units,
+                                           @Nullable String lang, int responseCode)
+            throws IOException, URISyntaxException, NetworkException {
+        if (checkAppIdCount < 4) {
+            checkAppIdCount++;
+            String appid = ApiConst.IDS[new Random().nextInt(4)];
+            return getWeatherByCity(cityName, appid, units, lang);
+        } else {
+            checkAppIdCount = 0;
+            throw new NetworkException(responseCode);
+        }
+    }
+
     @NonNull
     private URL getWeatherUrl(@NonNull String cityName, @NonNull String appId,
                               @NonNull String units, @Nullable String lang)
-            throws URISyntaxException, MalformedURLException, UnsupportedEncodingException {
+            throws URISyntaxException, MalformedURLException {
         String targetUrl = String.format("%s/%s/%s", ApiConst.URLS.BASE_URL,
                 ApiConst.URLS.VERSION, ApiConst.URLS.WEATHER);
 
@@ -71,8 +92,7 @@ public class NetworkConnection {
     }
 
     @Nullable
-    private String getQuery(@NonNull List<NameValuePair> params)
-            throws UnsupportedEncodingException {
+    private String getQuery(@NonNull List<NameValuePair> params) {
         if (params.isEmpty()) {
             return null;
         }
@@ -80,14 +100,15 @@ public class NetworkConnection {
         boolean first = true;
 
         for (NameValuePair pair : params) {
-            if (first)
+            if (first) {
                 first = false;
-            else
+            } else {
                 result.append("&");
+            }
 
-            result.append(URLEncoder.encode(pair.getName(), CHARSET_UTF_8));
+            result.append(pair.getName());
             result.append("=");
-            result.append(URLEncoder.encode(pair.getValue(), CHARSET_UTF_8));
+            result.append(pair.getValue());
         }
 
         return result.toString();

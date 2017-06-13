@@ -2,6 +2,8 @@ package com.github.demixdn.weather.data;
 
 import android.support.annotation.NonNull;
 
+import com.github.demixdn.weather.data.model.Weather;
+
 /**
  * Created on 08.06.2017
  * Project open-weather
@@ -9,8 +11,8 @@ import android.support.annotation.NonNull;
  * @author Aleks Sander
  */
 
-public interface DataEmitter<Data> {
-    void onEmit(@NonNull Data data);
+public interface WeatherEmitter {
+    void onEmit(@NonNull Weather weatherItem);
 
     void onComplete();
 

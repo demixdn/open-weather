@@ -5,7 +5,8 @@
         <item
             android:id="@+id/nav_cities"
             android:icon="@drawable/ic_sunny"
-            android:title="@string/cities_weather"/>
+            android:title="@string/cities_weather"
+            android:checked="true"/>
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_person_outline"

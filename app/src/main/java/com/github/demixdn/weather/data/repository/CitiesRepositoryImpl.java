@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +42,6 @@ public class CitiesRepositoryImpl implements CitiesRepository {
         this.resources = resources;
         this.authManager = authManager;
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
     }
 
     @Override
@@ -57,6 +57,7 @@ public class CitiesRepositoryImpl implements CitiesRepository {
             sendFalse(approveCallback);
         } else {
             DatabaseReference userReference = databaseReference.child(currentUser.getUid());
+            userReference.keepSynced(true);
             String key = userReference.push().getKey();
             HashMap<String, Object> cityMap = new HashMap<>();
             cityMap.put(key, cityNameCountry);
@@ -71,7 +72,7 @@ public class CitiesRepositoryImpl implements CitiesRepository {
             sendFalse(approveCallback);
         } else {
             DatabaseReference userReference = databaseReference.child(currentUser.getUid());
-            userReference.addValueEventListener(new RemoveCityValueEventListener(cityNameCountry, approveCallback));
+            userReference.addListenerForSingleValueEvent(new RemoveCityValueEventListener(cityNameCountry, approveCallback));
         }
     }
 
@@ -100,32 +101,37 @@ public class CitiesRepositoryImpl implements CitiesRepository {
         @Override
         public void onComplete(ParseResult parseResult) {
             List<String> cities = parseResult.cities;
-            callback.onSuccess(cities);
+            if(callback !=null) {
+                callback.onSuccess(cities);
+            }
         }
     }
 
     private static class AddCityCompletionListener implements DatabaseReference.CompletionListener {
-        private final DataCallback<Boolean> approveCallback;
+        private final WeakReference<DataCallback<Boolean>> approveCallback;
 
         AddCityCompletionListener(DataCallback<Boolean> approveCallback) {
-            this.approveCallback = approveCallback;
+            this.approveCallback = new WeakReference<>(approveCallback);
         }
 
         @Override
         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-            if (databaseError != null) {
-                approveCallback.onException(databaseError.toException());
-            } else {
-                approveCallback.onSuccess(true);
+            DataCallback<Boolean> callback = approveCallback.get();
+            if (callback != null) {
+                if (databaseError != null) {
+                    callback.onException(databaseError.toException());
+                } else {
+                    callback.onSuccess(true);
+                }
             }
         }
     }
 
     private static class CitiesValueEventListener implements ValueEventListener {
-        private final DataCallback<List<City>> callback;
+        private final WeakReference<DataCallback<List<City>>> callback;
 
         CitiesValueEventListener(DataCallback<List<City>> callback) {
-            this.callback = callback;
+            this.callback = new WeakReference<>(callback);
         }
 
         @Override
@@ -138,32 +144,38 @@ public class CitiesRepositoryImpl implements CitiesRepository {
                     cities.add(cityToAdd);
                 }
             }
-            callback.onSuccess(cities);
+            DataCallback<List<City>> dataCallback = callback.get();
+            if (dataCallback != null) {
+                dataCallback.onSuccess(cities);
+            }
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-            callback.onException(databaseError.toException());
+            DataCallback<List<City>> dataCallback = callback.get();
+            if (dataCallback != null) {
+                dataCallback.onException(databaseError.toException());
+            }
         }
     }
 
     private static class RemoveCityValueEventListener implements ValueEventListener {
 
         private final String cityNameCountry;
-        private final DataCallback<Boolean> approveCallback;
+        private final WeakReference<DataCallback<Boolean>> approveCallback;
 
         RemoveCityValueEventListener(String cityNameCountry, DataCallback<Boolean> approveCallback) {
             this.cityNameCountry = cityNameCountry;
-            this.approveCallback = approveCallback;
+            this.approveCallback = new WeakReference<>(approveCallback);
         }
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             Iterator<DataSnapshot> snapshotIterator = dataSnapshot.getChildren().iterator();
-            while (snapshotIterator.hasNext()){
+            while (snapshotIterator.hasNext()) {
                 DataSnapshot citySnapshot = snapshotIterator.next();
                 String cityString = citySnapshot.getValue().toString();
-                if(cityNameCountry.contains(cityString)){
+                if (cityNameCountry.contains(cityString)) {
                     removeValueIn(citySnapshot);
                     break;
                 }
@@ -175,10 +187,13 @@ public class CitiesRepositoryImpl implements CitiesRepository {
             ref.removeValue(new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if (databaseError != null) {
-                        approveCallback.onException(databaseError.toException());
-                    } else {
-                        approveCallback.onSuccess(true);
+                    DataCallback<Boolean> callback = approveCallback.get();
+                    if (callback != null) {
+                        if (databaseError != null) {
+                            callback.onException(databaseError.toException());
+                        } else {
+                            callback.onSuccess(true);
+                        }
                     }
                 }
             });
@@ -186,7 +201,10 @@ public class CitiesRepositoryImpl implements CitiesRepository {
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-            approveCallback.onException(databaseError.toException());
+            DataCallback<Boolean> callback = approveCallback.get();
+            if (callback != null) {
+                callback.onException(databaseError.toException());
+            }
         }
     }
 }

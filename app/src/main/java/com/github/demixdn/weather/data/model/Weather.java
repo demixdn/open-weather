@@ -1,5 +1,9 @@
 package com.github.demixdn.weather.data.model;
 
+import com.github.demixdn.weather.utils.Logger;
+
+import java.util.Calendar;
+
 /**
  * Created on 09.06.2017
  * Project open-weather
@@ -8,6 +12,8 @@ package com.github.demixdn.weather.data.model;
  */
 
 public class Weather {
+    private final long THREE_HOUR_IN_SECONDS = 3 * 60 * 60L;
+
     private City city;
     private String conditionTitle;
     private String conditionDescription;
@@ -19,13 +25,14 @@ public class Weather {
     private int humidity;
     private double windSpeed;
     private double windDegrees;
-    private long weatherTime;
+    private long weatherTimeInSeconds;
 
     public City getCity() {
         return city;
     }
 
     public void setCity(City city) {
+        Logger.d(this, "Set city " + city.toString());
         this.city = city;
     }
 
@@ -110,11 +117,36 @@ public class Weather {
     }
 
     public long getWeatherTime() {
-        return weatherTime;
+        return weatherTimeInSeconds;
     }
 
     public void setWeatherTime(long weatherTime) {
-        this.weatherTime = weatherTime;
+        this.weatherTimeInSeconds = weatherTime;
+    }
+
+    public boolean isEvicted() {
+        long currentInSeconds = Calendar.getInstance().getTimeInMillis() / 1000L;
+        long diffInSec = currentInSeconds - weatherTimeInSeconds;
+        return diffInSec > THREE_HOUR_IN_SECONDS;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Weather weather = (Weather) o;
+
+        if (weatherTimeInSeconds != weather.weatherTimeInSeconds) return false;
+        return city.equals(weather.city);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = city.hashCode();
+        result = 31 * result + (int) (weatherTimeInSeconds ^ (weatherTimeInSeconds >>> 32));
+        return result;
     }
 
     @Override

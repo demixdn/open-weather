@@ -83,6 +83,7 @@ public final class AuthManagerImpl implements FacebookCallback<LoginResult>, OnC
     @Override
     public void onSuccess(LoginResult loginResult) {
         Logger.i(this, "Login result is success for userId:" + loginResult.getAccessToken().getUserId());
+        needShowDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this);
     }
@@ -119,6 +120,15 @@ public final class AuthManagerImpl implements FacebookCallback<LoginResult>, OnC
                 onResultError(taskException);
 
             }
+        }
+    }
+
+    private void needShowDialog() {
+        if (this.loginCallback == null)
+            return;
+        LoginCallback loginCallback = this.loginCallback.get();
+        if (loginCallback != null) {
+            loginCallback.showProgress();
         }
     }
 

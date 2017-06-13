@@ -22,9 +22,14 @@ public final class ApiConst {
     }
 
     public static final class PARAM_VALUE {
-        public static final String APPID = "1f0402f014d6e14ae3fe88f3b8971a82";
+        public static final String QUERY = "1f0402f014d6e14ae3fe88f3b8971a82";
         public static final String UNIT_METRICS = "metric";
     }
+
+    static final String[] IDS = new String[]{"8fc7118ea2001977dcaecf9bc9c6bb70",
+            "17d9d1f6ba2be4ff15f6b8e0b94c845a",
+            "ff6f5d189dfa1eba10cc3559a7eb097d",
+            "3bb039201af7704f35c2b60bde6663a2"};
 
 
 }

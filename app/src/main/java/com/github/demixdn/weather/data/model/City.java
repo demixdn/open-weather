@@ -31,12 +31,33 @@ public final class City implements Comparable<City> {
     public City() {
     }
 
+    public City(String name, String country) {
+        this.name = name;
+        this.country = country;
+    }
+
     public City(@NonNull String sourceForSplit) {
         String[] split = sourceForSplit.split(",");
         name = split[0];
         if (split.length > 1) {
             country = split[1].trim();
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String toAppString() {

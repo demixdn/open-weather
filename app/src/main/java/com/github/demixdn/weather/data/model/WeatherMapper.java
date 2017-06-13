@@ -23,7 +23,7 @@ public final class WeatherMapper {
         }
 
         Weather weather = new Weather();
-        weather.setCity(new City(response.cityName + "," + response.system.country.toUpperCase()));
+        weather.setCity(new City(response.cityName, response.system.country.toUpperCase()));
         weather.setConditionDescription(response.conditionList.get(0).description);
         weather.setConditionTitle(response.conditionList.get(0).main);
         weather.setConditionIcon(response.conditionList.get(0).icon);

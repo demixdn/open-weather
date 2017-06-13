@@ -81,7 +81,10 @@ public class AddCityActivity extends AppCompatActivity implements AddCityView {
     }
 
     private void clearData() {
-        addCityAdapter.destroyData();
+        if (addCityAdapter != null) {
+            addCityAdapter.destroyData();
+        }
+        System.gc();
         getPresenter().unbindView();
     }
 
