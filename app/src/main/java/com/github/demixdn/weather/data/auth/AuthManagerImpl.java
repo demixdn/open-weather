@@ -124,8 +124,9 @@ public final class AuthManagerImpl implements FacebookCallback<LoginResult>, OnC
     }
 
     private void needShowDialog() {
-        if (this.loginCallback == null)
+        if (this.loginCallback == null) {
             return;
+        }
         LoginCallback loginCallback = this.loginCallback.get();
         if (loginCallback != null) {
             loginCallback.showProgress();
@@ -133,8 +134,9 @@ public final class AuthManagerImpl implements FacebookCallback<LoginResult>, OnC
     }
 
     private void onResultSuccess(FirebaseUser user) {
-        if (this.loginCallback == null)
+        if (this.loginCallback == null) {
             return;
+        }
         LoginCallback loginCallback = this.loginCallback.get();
         if (loginCallback != null) {
             loginCallback.onAuthSuccess(user);
@@ -142,8 +144,9 @@ public final class AuthManagerImpl implements FacebookCallback<LoginResult>, OnC
     }
 
     private void onResultError(Exception error) {
-        if (this.loginCallback == null)
+        if (this.loginCallback == null) {
             return;
+        }
         LoginCallback loginCallback = this.loginCallback.get();
         if (loginCallback != null) {
             loginCallback.onAuthError(error);

@@ -39,14 +39,15 @@ public final class AppTypeface {
      * Default return Roboto-Regular
      */
     @Nullable
-    public final Typeface get(@NonNull @Font String fontName) {
+    public Typeface get(@NonNull @Font String fontName) {
         return getTypeFace(context.get(), fontName);
     }
 
-    public final void setTypefaceIn(@NonNull @Font String typeface, @NonNull TextView in) {
+    public void setTypefaceIn(@NonNull @Font String typeface, @NonNull TextView in) {
         Typeface font = get(typeface);
-        if (font != null)
+        if (font != null) {
             in.setTypeface(font);
+        }
     }
 
     @Nullable
@@ -75,7 +76,7 @@ public final class AppTypeface {
     /**
      * Clear typeface storage.
      */
-    public final void clear() {
+    public void clear() {
         typefaceHashMap.clear();
     }
 

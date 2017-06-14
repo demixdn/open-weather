@@ -66,7 +66,7 @@ class DispatcherWeatherEmitter implements WeatherEmitter {
     @Override
     public void onException(@NonNull Exception ex) {
         City emittedCity = cityDeque.pollFirst();
-        if (ex instanceof NullPointerException && ex.getMessage().contentEquals("Object not find") && emittedCity != null) {
+        if (ex instanceof WeatherNotFindException && emittedCity != null) {
             getWeatherFromNetwork(emittedCity);
         } else {
             WeatherEmitter weatherEmitter = this.weatherEmitter.get();

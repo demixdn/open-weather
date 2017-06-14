@@ -26,9 +26,9 @@ import java.util.Random;
  */
 
 public class NetworkConnection {
-    private static final String CHARSET_UTF_8 = "UTF-8";
     private static final int CONNECT_TIMEOUT = 10000;//millis
     private static final int READ_TIMEOUT = 10000;//millis
+    private static final int MAX_ATTEMPT = 4;
 
     private int checkAppIdCount = 0;
 
@@ -61,9 +61,9 @@ public class NetworkConnection {
     private String connectWithReserveAppId(@NonNull String cityName, @NonNull String units,
                                            @Nullable String lang, int responseCode)
             throws IOException, URISyntaxException, NetworkException {
-        if (checkAppIdCount < 4) {
+        if (checkAppIdCount < MAX_ATTEMPT) {
             checkAppIdCount++;
-            String appid = ApiConst.IDS[new Random().nextInt(4)];
+            String appid = ApiConst.IDS[new Random().nextInt(ApiConst.IDS.length)];
             return getWeatherByCity(cityName, appid, units, lang);
         } else {
             checkAppIdCount = 0;

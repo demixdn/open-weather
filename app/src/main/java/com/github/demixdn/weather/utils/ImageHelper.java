@@ -16,7 +16,7 @@ import com.github.demixdn.weather.ui.transformation.CropCircleTransformation;
  * @author Aleks Sander
  */
 
-public class ImageHelper {
+public final class ImageHelper {
     private ImageHelper() {
         //no instance
     }

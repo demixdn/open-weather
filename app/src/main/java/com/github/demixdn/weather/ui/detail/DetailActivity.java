@@ -18,6 +18,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String EXTRA_WEATHER_ITEM = "extra_weather_item";
+    private static final float MAX_ZOOM_PREFERENCE = 10f;
+    private static final float MIN_ZOOM_PREFERENCE = 7f;
+    private static final float ZOOM_VALUE = 9f;
     private Weather weatherItem;
 
     public static void navigate(@NonNull Context context, @NonNull Weather weather) {
@@ -50,9 +53,9 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         LatLng kievLatLng = new LatLng(weatherItem.getCity().lat, weatherItem.getCity().lon);
         googleMap.addMarker(new MarkerOptions().position(kievLatLng).title("Marker in " + weatherItem.getCity().toAppString()));
-        googleMap.setMaxZoomPreference(10f);
-        googleMap.setMinZoomPreference(7f);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kievLatLng, 9f));
+        googleMap.setMaxZoomPreference(MAX_ZOOM_PREFERENCE);
+        googleMap.setMinZoomPreference(MIN_ZOOM_PREFERENCE);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kievLatLng, ZOOM_VALUE));
 
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
  * @author Aleks Sander
  */
 
-final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolder> {
+final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolder> implements CityRemoveAction {
 
     private static final int PENDING_REMOVAL_TIMEOUT = 3000; // 3sec
 
@@ -86,6 +86,7 @@ final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolde
         }
     }
 
+    @Override
     public void pendingRemoval(int position) {
         final Weather item = items.get(position);
         if (!itemsPendingRemoval.contains(item)) {
@@ -105,6 +106,7 @@ final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolde
         }
     }
 
+    @Override
     public void remove(int position) {
         Weather item = items.get(position);
         if (itemsPendingRemoval.contains(item)) {
@@ -117,6 +119,7 @@ final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolde
         }
     }
 
+    @Override
     public boolean isPendingRemoval(int position) {
         Weather item = items.get(position);
         return itemsPendingRemoval.contains(item);

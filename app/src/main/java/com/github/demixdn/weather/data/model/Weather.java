@@ -13,7 +13,7 @@ import java.util.Calendar;
  */
 
 public class Weather implements Serializable {
-    private final static long EVICTED_PERIOD = 2 * 60 * 60L;
+    private static final long EVICTED_PERIOD = 2 * 60 * 60L;
 
     private City city;
     private String conditionTitle;

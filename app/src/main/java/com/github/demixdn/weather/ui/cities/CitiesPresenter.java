@@ -25,6 +25,7 @@ import java.util.List;
 
 public class CitiesPresenter extends BasePresenter<CitiesView> {
     private static final int CHECK_TASK_ENDED_DELAY = 4000;
+    private static final int MAX_ATTEMPT = 4;
     @NonNull
     private final CitiesRepository citiesRepository;
     @NonNull
@@ -43,7 +44,7 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
             @Override
             public void run() {
                 count++;
-                if (count == 4) {
+                if (count == MAX_ATTEMPT) {
                     if (getView() != null) {
                         getView().showError("You have not registered city");
 
@@ -83,17 +84,6 @@ public class CitiesPresenter extends BasePresenter<CitiesView> {
     }
 
     void onCityRemove(@NonNull City city) {
-        weatherRepository.removeWeather(city, new DataCallback<Boolean>() {
-            @Override
-            public void onSuccess(@NonNull Boolean aBoolean) {
-                Logger.d(this, aBoolean ? "Weather for city removed" : "City not removed");
-            }
-
-            @Override
-            public void onException(@NonNull Exception ex) {
-                Logger.e("Weather for city remove exception", ex);
-            }
-        });
         citiesRepository.removeUserCity(city.toAppString(), new DataCallback<Boolean>() {
             @Override
             public void onSuccess(@NonNull Boolean aBoolean) {

@@ -33,7 +33,7 @@ final class CityWeatherViewHolder extends RecyclerView.ViewHolder {
     private final WeatherItemClickListener clickListener;
 
 
-    CityWeatherViewHolder(ViewGroup parentView, final WeatherItemClickListener clickListener) {
+    CityWeatherViewHolder(@NonNull ViewGroup parentView, @NonNull WeatherItemClickListener clickListener) {
         super(LayoutInflater.from(parentView.getContext()).inflate(R.layout.view_city_item, parentView, false));
         this.clickListener = clickListener;
         resources = itemView.getResources();
@@ -45,7 +45,7 @@ final class CityWeatherViewHolder extends RecyclerView.ViewHolder {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickListener.onWeatherItemClicked((Weather) v.getTag());
+                CityWeatherViewHolder.this.clickListener.onWeatherItemClicked((Weather) v.getTag());
             }
         });
         undoButton = (Button) itemView.findViewById(R.id.btCityItemRemoveUndo);

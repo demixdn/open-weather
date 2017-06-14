@@ -30,6 +30,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_add"
-        app:fabSize="mini"/>
+        app:fabSize="normal"/>
 
 </android.support.design.widget.CoordinatorLayout>

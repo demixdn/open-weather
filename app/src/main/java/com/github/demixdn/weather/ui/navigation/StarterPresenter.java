@@ -2,7 +2,6 @@ package com.github.demixdn.weather.ui.navigation;
 
 import android.support.annotation.NonNull;
 
-import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.repository.CitiesRepository;
@@ -69,6 +68,11 @@ public final class StarterPresenter extends BasePresenter<StartView> {
 
     void viewReady() {
         citiesRepository.getUserCities(citiesCallback);
+        FirebaseUser user = authManager.getCurrentUser();
+        if (user != null && getView() != null) {
+            getView().showUser(user);
+
+        }
     }
 
     void subscribe() {

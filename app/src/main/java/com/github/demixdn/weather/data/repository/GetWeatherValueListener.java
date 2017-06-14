@@ -27,10 +27,10 @@ class GetWeatherValueListener implements ValueEventListener {
     public void onDataChange(DataSnapshot dataSnapshot) {
         Weather weather = dataSnapshot.getValue(Weather.class);
         if (weather == null) {
-            emitException(new NullPointerException("Object not find"));
+            emitException(new WeatherNotFindException());
         } else {
             if (weather.isEvicted()) {
-                emitException(new NullPointerException("Object not find"));
+                emitException(new WeatherNotFindException());
             } else {
                 emitWeatherItem(weather);
             }

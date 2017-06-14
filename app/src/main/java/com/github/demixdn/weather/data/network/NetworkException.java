@@ -6,28 +6,24 @@ package com.github.demixdn.weather.data.network;
  * @author Aleksandr
  */
 
-public class NetworkException extends Exception {
+public final class NetworkException extends Exception {
 
-    public static final int HTTP_BAD_REQUEST = 400;
-    public static final int HTTP_UNAUTHORIZED = 401;
-    public static final int HTTP_FORBIDDEN = 403;
-    public static final int HTTP_NOT_FOUND = 404;
-    public static final int HTTP_CLIENT_TIMEOUT = 408;
-    public static final int HTTP_TOO_MANY_REQUESTS = 429;
-    public static final int HTTP_INTERNAL_ERROR = 500;
-    public static final int HTTP_BAD_GATEWAY = 502;
-    public static final int HTTP_UNAVAILABLE = 503;
-    public static final int HTTP_GATEWAY_TIMEOUT = 504;
+    private static final int HTTP_BAD_REQUEST = 400;
+    private static final int HTTP_UNAUTHORIZED = 401;
+    private static final int HTTP_FORBIDDEN = 403;
+    private static final int HTTP_NOT_FOUND = 404;
+    private static final int HTTP_CLIENT_TIMEOUT = 408;
+    static final int HTTP_TOO_MANY_REQUESTS = 429;
+    private static final int HTTP_INTERNAL_ERROR = 500;
+    private static final int HTTP_BAD_GATEWAY = 502;
+    private static final int HTTP_UNAVAILABLE = 503;
+    private static final int HTTP_GATEWAY_TIMEOUT = 504;
 
-    private int errorCode;
+    private final int errorCode;
 
-    public NetworkException(int responseCode) {
+    NetworkException(int responseCode) {
         super(getErrorMessage(responseCode));
         this.errorCode = responseCode;
-    }
-
-    public int getErrorCode() {
-        return errorCode;
     }
 
     private static String getErrorMessage(int errorCode) {

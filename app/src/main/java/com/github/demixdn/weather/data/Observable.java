@@ -14,15 +14,16 @@ import java.util.Set;
  */
 
 public class Observable {
-    private final HashMap<Integer, WeakReference<Observer>> observers;
+    private final Map<Integer, WeakReference<Observer>> observers;
 
     public Observable() {
         this.observers = new HashMap<>();
     }
 
     public synchronized void addObserver(Observer o) {
-        if (o == null)
+        if (o == null) {
             throw new NullPointerException();
+        }
         observers.put(o.hashCode(), new WeakReference<>(o));
     }
 
