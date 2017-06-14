@@ -32,10 +32,13 @@ public class Observable {
         while (iterator.hasNext()) {
             Map.Entry<Integer, WeakReference<Observer>> next = iterator.next();
             WeakReference<Observer> observerReference = next.getValue();
-            if (observerReference == null || observerReference.get() == null) {
-                iterator.remove();
-            } else {
-                observerReference.get().update();
+            if (observerReference != null) {
+                Observer observer = observerReference.get();
+                if (observer == null) {
+                    iterator.remove();
+                } else {
+                    observer.update();
+                }
             }
         }
     }

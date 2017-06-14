@@ -151,14 +151,14 @@ public final class AppComponent {
         return profilePresenter;
     }
 
-    public void reload() {
-        weatherRepository = null;
-        citiesRepository = null;
+    public synchronized void reload() {
+        weatherRepository = new WeatherRepositoryImpl(getNetworkConnection(), getExecutor(), FirebaseDatabase.getInstance());
+        citiesRepository = new CitiesRepositoryImpl(getResources(), getAuthManager(), FirebaseDatabase.getInstance());
 
-        addCityPresenter = null;
-        citiesPresenter = null;
-        starterPresenter = null;
-        profilePresenter = null;
+        addCityPresenter = new AddCityPresenter(getCitiesRepository());
+        citiesPresenter = new CitiesPresenter(getCitiesRepository(), getWeatherRepository());
+        starterPresenter = new StarterPresenter(getFirebaseAuth(), getCitiesRepository());
+        profilePresenter = new ProfilePresenter(getAuthManager());
         reloadObservalble.notifyObservers();
     }
 

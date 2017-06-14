@@ -35,21 +35,12 @@ final class CitiesParseTask implements Runnable {
 
     @Override
     public void run() {
-        final ParseResult parseResult = get();
         handler.post(new Runnable() {
             @Override
             public void run() {
-                parseListener.onComplete(parseResult);
+                parseListener.onComplete(parse());
             }
         });
-    }
-
-    private ParseResult get() {
-        long startTime = System.currentTimeMillis();
-        List<String> cities = parse();
-        long endTime = System.currentTimeMillis();
-        long duration = (endTime - startTime);
-        return new ParseResult(duration, cities);
     }
 
 
@@ -69,7 +60,7 @@ final class CitiesParseTask implements Runnable {
         }
     }
 
-    public interface ParseListener {
-        void onComplete(ParseResult parseResult);
+    interface ParseListener {
+        void onComplete(@NonNull List<String> parseResult);
     }
 }

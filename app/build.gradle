@@ -2,12 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        releaseConfig {
-            keyAlias 'weather'
-            keyPassword 'cOUGOr1vYNxZlU2I'
-            storeFile file('../buildsystem/weatherkeys.jks')
-            storePassword 'dwCX72tUo6LboRnc'
-        }
         debugConfig {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
@@ -27,15 +21,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable false;
+            debuggable false
         }
         debug {
             signingConfig signingConfigs.debugConfig
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable true;
+            debuggable true
         }
     }
     productFlavors {

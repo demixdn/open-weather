@@ -18,9 +18,13 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
+        init(this);
         appComponent = new AppComponent(this);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
+
+    private static void init(App app) {
+        instance = app;
     }
 
     public static App getInstance() {

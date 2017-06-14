@@ -85,7 +85,6 @@ public class AddCityActivity extends AppCompatActivity implements AddCityView, O
         if (addCityAdapter != null) {
             addCityAdapter.destroyData();
         }
-        System.gc();
         getPresenter().unbindView();
     }
 

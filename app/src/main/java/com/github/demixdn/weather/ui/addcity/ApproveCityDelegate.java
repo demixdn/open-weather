@@ -86,6 +86,8 @@ class ApproveCityDelegate implements View.OnClickListener {
                 String cityName = (String) v.getTag();
                 presenter.removeCity(cityName);
                 break;
+            default:
+                throw new IllegalArgumentException("onClick not defined for this view #" + v);
         }
     }
 }

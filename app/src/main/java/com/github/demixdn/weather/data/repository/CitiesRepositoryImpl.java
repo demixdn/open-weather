@@ -111,10 +111,9 @@ public class CitiesRepositoryImpl implements CitiesRepository {
         }
 
         @Override
-        public void onComplete(ParseResult parseResult) {
-            List<String> cities = parseResult.cities;
+        public void onComplete(List<String> citiesList) {
             if (callback != null) {
-                callback.onSuccess(cities);
+                callback.onSuccess(citiesList);
             }
         }
     }
