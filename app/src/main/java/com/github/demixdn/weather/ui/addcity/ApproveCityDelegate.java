@@ -81,13 +81,12 @@ class ApproveCityDelegate implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btCancelCity:
-                String cityName = (String) v.getTag();
-                presenter.removeCity(cityName);
-                break;
-            default:
-                throw new IllegalArgumentException("onClick not defined for this view #" + v);
+        int i = v.getId();
+        if (i == R.id.btCancelCity) {
+            String cityName = (String) v.getTag();
+            presenter.removeCity(cityName);
+        } else {
+            throw new IllegalArgumentException("onClick not defined for this view #" + v);
         }
     }
 }

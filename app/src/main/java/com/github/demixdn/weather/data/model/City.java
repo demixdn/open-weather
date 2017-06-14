@@ -34,6 +34,7 @@ public final class City implements Comparable<City>, Serializable {
     }
 
     public City() {
+        //default
     }
 
     public City(String name, String country) {

@@ -21,19 +21,29 @@ public final class ApiConst {
         static final String VERSION = "data/2.5";
         static final String WEATHER = "weather";
 
+        private URLS() {
+            //no instance
+        }
     }
+
     static final class PARAM_KEY {
         static final String CITY = "q";
         static final String APP_ID = "appid";
         static final String UNITS = "units";
-
         static final String LANG = "lang";
 
+        private PARAM_KEY() {
+            //no instance
+        }
     }
+
     public static final class PARAM_VALUE {
         public static final String QUERY = "1f0402f014d6e14ae3fe88f3b8971a82";
         public static final String UNIT_METRICS = "metric";
 
+        private PARAM_VALUE() {
+            //no instance
+        }
     }
 
 

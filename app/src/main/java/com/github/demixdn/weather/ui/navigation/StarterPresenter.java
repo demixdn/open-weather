@@ -49,21 +49,7 @@ public final class StarterPresenter extends BasePresenter<StartView> {
             }
         };
         subscribe();
-        this.authManager.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = authManager.getCurrentUser();
-                if (user == null) {
-                    if (getView() != null) {
-                        getView().showLoginScreen();
-                    }
-                } else {
-                    if (getView() != null) {
-                        getView().showUser(user);
-                    }
-                }
-            }
-        });
+        this.authManager.addAuthStateListener(new StarterAuthStateListener());
     }
 
     void viewReady() {
@@ -77,5 +63,21 @@ public final class StarterPresenter extends BasePresenter<StartView> {
 
     void subscribe() {
         this.citiesRepository.subscribeToCityChanges(citiesCallback);
+    }
+
+    private class StarterAuthStateListener implements FirebaseAuth.AuthStateListener {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            FirebaseUser user = authManager.getCurrentUser();
+            if (user == null) {
+                if (getView() != null) {
+                    getView().showLoginScreen();
+                }
+            } else {
+                if (getView() != null) {
+                    getView().showUser(user);
+                }
+            }
+        }
     }
 }

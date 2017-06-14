@@ -19,11 +19,8 @@ public final class NetworkException extends Exception {
     private static final int HTTP_UNAVAILABLE = 503;
     private static final int HTTP_GATEWAY_TIMEOUT = 504;
 
-    private final int errorCode;
-
     NetworkException(int responseCode) {
         super(getErrorMessage(responseCode));
-        this.errorCode = responseCode;
     }
 
     private static String getErrorMessage(int errorCode) {
