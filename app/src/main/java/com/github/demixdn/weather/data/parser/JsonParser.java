@@ -1,9 +1,10 @@
-package com.github.demixdn.weather.data.model;
+package com.github.demixdn.weather.data.parser;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.bluelinelabs.logansquare.LoganSquare;
+import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.model.weatherdto.WeatherResponseDTO;
 
 import java.io.IOException;

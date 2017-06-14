@@ -6,9 +6,9 @@ import android.support.annotation.NonNull;
 
 import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.model.City;
-import com.github.demixdn.weather.data.model.JsonParser;
+import com.github.demixdn.weather.data.parser.JsonParser;
 import com.github.demixdn.weather.data.model.Weather;
-import com.github.demixdn.weather.data.model.WeatherMapper;
+import com.github.demixdn.weather.data.mapper.WeatherMapper;
 import com.github.demixdn.weather.data.model.weatherdto.WeatherResponseDTO;
 import com.github.demixdn.weather.data.network.NetworkConnection;
 import com.github.demixdn.weather.data.network.NetworkException;
@@ -16,6 +16,7 @@ import com.github.demixdn.weather.utils.Logger;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 import static com.github.demixdn.weather.data.network.ApiConst.PARAM_VALUE.QUERY;
 import static com.github.demixdn.weather.data.network.ApiConst.PARAM_VALUE.UNIT_METRICS;
@@ -43,7 +44,9 @@ class GetNetworkWeatherTask implements Runnable {
     @Override
     public void run() {
         try {
-            String weatherJsonString = networkConnection.getWeatherByCity(city.toQueryString(), QUERY, UNIT_METRICS, null);
+            Locale locale = Locale.getDefault();
+            String lang = locale.getLanguage();
+            String weatherJsonString = networkConnection.getWeatherByCity(city.toQueryString(), QUERY, UNIT_METRICS, lang);
 
             WeatherResponseDTO weatherResponseDTO = JsonParser.parseWeatherJson(weatherJsonString);
             Weather weatherResponse = WeatherMapper.transformFrom(weatherResponseDTO);

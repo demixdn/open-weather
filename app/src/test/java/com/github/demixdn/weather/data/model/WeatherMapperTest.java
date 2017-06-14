@@ -1,6 +1,8 @@
 package com.github.demixdn.weather.data.model;
 
 import com.github.demixdn.weather.data.model.weatherdto.WeatherResponseDTO;
+import com.github.demixdn.weather.data.parser.JsonParser;
+import com.github.demixdn.weather.data.mapper.WeatherMapper;
 
 import org.junit.Before;
 import org.junit.Test;

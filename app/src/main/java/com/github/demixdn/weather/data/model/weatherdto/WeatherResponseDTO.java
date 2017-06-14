@@ -14,6 +14,9 @@ import java.util.List;
 @JsonObject
 public class WeatherResponseDTO {
 
+    @JsonField(name = "coord")
+    public CoordDTO coords;
+
     @JsonField(name = "weather")
     public List<ConditionDTO> conditionList;
 

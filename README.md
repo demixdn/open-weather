@@ -6,4 +6,4 @@ Used [LoganSquare](https://github.com/bluelinelabs/LoganSquare) for parsing, [Fa
 
 **Test project**.
 
-*Don't forget add your <google-services.json> file and defined <map_key> into string values.*
+*Don't forget add your <google-services.json> file and defined <google_maps_key> into string values.*

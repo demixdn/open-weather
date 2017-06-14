@@ -6,8 +6,10 @@ import android.text.TextUtils;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
+import com.github.demixdn.weather.data.parser.JsonParser;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,11 +19,14 @@ import java.util.List;
  * @author Aleks Sander
  */
 @JsonObject
-public final class City implements Comparable<City> {
+public final class City implements Comparable<City>, Serializable {
     @JsonField(name = "name")
     public String name;
     @JsonField(name = "country")
     public String country;
+
+    public float lon;
+    public float lat;
 
     @NonNull
     public static List<City> parseJson(@Nullable String json) throws IOException {

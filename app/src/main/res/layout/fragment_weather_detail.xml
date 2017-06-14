@@ -31,17 +31,44 @@
 
         <TextView
             android:id="@+id/tvCurrentWeatherDescription"
-            style="@style/CurrentSubText"
-            android:text="@string/test_description"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:autoText="false"
+            android:gravity="center_horizontal"
+
+            android:text="@string/test_description"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/tvCurrentWeatherPressure"
-            style="@style/CurrentPressHum"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
             android:text="@string/test_pressure"/>
 
         <TextView
             android:id="@+id/tvCurrentWeatherHumidity"
-            style="@style/CurrentPressHum"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
             android:text="@string/test_humidity"/>
+
+        <TextView
+            android:id="@+id/tvCurrentWeatherWindSpeed"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:text="@string/test_wind_speed"/>
     </LinearLayout>
 </FrameLayout>

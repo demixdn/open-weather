@@ -1,7 +1,9 @@
-package com.github.demixdn.weather.data.model;
+package com.github.demixdn.weather.data.mapper;
 
 import android.support.annotation.Nullable;
 
+import com.github.demixdn.weather.data.model.City;
+import com.github.demixdn.weather.data.model.Weather;
 import com.github.demixdn.weather.data.model.weatherdto.WeatherResponseDTO;
 
 /**
@@ -23,7 +25,10 @@ public final class WeatherMapper {
         }
 
         Weather weather = new Weather();
-        weather.setCity(new City(response.cityName, response.system.country.toUpperCase()));
+        City city = new City(response.cityName, response.system.country.toUpperCase());
+        city.lon = response.coords.lon;
+        city.lat = response.coords.lat;
+        weather.setCity(city);
         weather.setConditionDescription(response.conditionList.get(0).description);
         weather.setConditionTitle(response.conditionList.get(0).main);
         weather.setConditionIcon(response.conditionList.get(0).icon);
