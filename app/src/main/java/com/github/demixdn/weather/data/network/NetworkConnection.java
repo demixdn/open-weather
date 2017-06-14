@@ -34,7 +34,7 @@ public class NetworkConnection {
 
     @WorkerThread
     @Nullable
-    public String getWeatherByCity(@NonNull String cityName, @NonNull String appId,
+    public synchronized String getWeatherByCity(@NonNull String cityName, @NonNull String appId,
                                    @NonNull String units, @Nullable String lang)
             throws IOException, URISyntaxException, NetworkException {
         Logger.d("Param city " + cityName);

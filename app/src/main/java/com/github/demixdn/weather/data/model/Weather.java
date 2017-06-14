@@ -5,6 +5,8 @@ import com.github.demixdn.weather.utils.Logger;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import static com.github.demixdn.weather.AppConst.EVICTED_PERIOD_SECONDS;
+
 /**
  * Created on 09.06.2017
  * Project open-weather
@@ -13,8 +15,6 @@ import java.util.Calendar;
  */
 
 public class Weather implements Serializable {
-    private static final long EVICTED_PERIOD = 2 * 60 * 60L;
-
     private City city;
     private String conditionTitle;
     private String conditionDescription;
@@ -128,7 +128,7 @@ public class Weather implements Serializable {
     public boolean isEvicted() {
         long currentInSeconds = Calendar.getInstance().getTimeInMillis() / 1000L;
         long diffInSec = currentInSeconds - weatherTimeInSeconds;
-        return diffInSec > EVICTED_PERIOD;
+        return diffInSec > EVICTED_PERIOD_SECONDS;
     }
 
     @Override

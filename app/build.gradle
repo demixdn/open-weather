@@ -46,6 +46,7 @@ dependencies {
     compile "com.android.support:support-v4:$appCompatVersion"
     compile "com.google.firebase:firebase-database:$gmsVersion"
     compile "com.google.firebase:firebase-auth:$gmsVersion"
+    compile "com.firebase:firebase-jobdispatcher:0.6.0"
     compile "com.google.android.gms:play-services-auth:$gmsVersion"
     compile "com.google.android.gms:play-services-maps:$gmsVersion"
 

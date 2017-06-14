@@ -2,6 +2,7 @@ package com.github.demixdn.weather.ui.navigation;
 
 import android.support.annotation.NonNull;
 
+import com.github.demixdn.weather.App;
 import com.github.demixdn.weather.data.DataCallback;
 import com.github.demixdn.weather.data.model.City;
 import com.github.demixdn.weather.data.repository.CitiesRepository;
@@ -70,10 +71,12 @@ public final class StarterPresenter extends BasePresenter<StartView> {
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             FirebaseUser user = authManager.getCurrentUser();
             if (user == null) {
+                App.getInstance().cancelWeatherDispatcher();
                 if (getView() != null) {
                     getView().showLoginScreen();
                 }
             } else {
+                App.getInstance().startWeatherDispatcher();
                 if (getView() != null) {
                     getView().showUser(user);
                 }
