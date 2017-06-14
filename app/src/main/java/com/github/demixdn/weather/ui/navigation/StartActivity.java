@@ -171,12 +171,14 @@ public class StartActivity extends AppCompatActivity
     }
 
     private void showAppInfo() {
+        progressDialog.dismiss();
         navigationView.getMenu().getItem(INDEX_ABOUT).setChecked(true);
         fabHide();
         navigator.showInfo(fragmentManager);
     }
 
     private void showProfile() {
+        progressDialog.dismiss();
         navigationView.getMenu().getItem(INDEX_PROFILE).setChecked(true);
         fabHide();
         navigator.showProfile(fragmentManager);
@@ -199,6 +201,7 @@ public class StartActivity extends AppCompatActivity
 
     @Override
     public void showEmptyState() {
+        progressDialog.dismiss();
         navigationView.getMenu().getItem(INDEX_CITY).setChecked(true);
         fabHide();
         navigator.showEmptyState(fragmentManager);
