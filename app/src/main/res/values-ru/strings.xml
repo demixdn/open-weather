@@ -44,8 +44,8 @@
     <string name="developer_email">Эл.почта: demixdn@gmail.com</string>
     <string name="developer_name">Александр плужник</string>
     <string name="developer_title">Разработчик</string>
-    <string name="auth_progress">Авторизация&#8451;</string>
-    <string name="cities_progress">Получение городов&#8451;</string>
+    <string name="auth_progress">Авторизация…</string>
+    <string name="cities_progress">Получение городов…</string>
     <string name="log_out_button">Выход из аккаунта</string>
     <string name="title_activity_detail">Погода</string>
 </resources>
