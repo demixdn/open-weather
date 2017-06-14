@@ -1,5 +1,7 @@
 package com.github.demixdn.weather.data.model;
 
+import com.github.demixdn.weather.AppConst;
+
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -18,7 +20,7 @@ public class WeatherTest {
     @Test
     public void isEvicted_true() throws Exception {
         Weather weather = new Weather();
-        long threeHoursAndOneSeconds = 3 * 60 * (60 + 1) * 1000L;
+        long threeHoursAndOneSeconds = AppConst.EVICTED_PERIOD_MILLIS + 1000L;
         long weatherTime = Calendar.getInstance().getTimeInMillis() - threeHoursAndOneSeconds;
         weather.setWeatherTime(weatherTime/1000);
 
@@ -28,7 +30,7 @@ public class WeatherTest {
     @Test
     public void isEvicted_false() throws Exception {
         Weather weather = new Weather();
-        long threeHoursWithoutOneSeconds = 3 * 60 * (60 - 1) * 1000L;
+        long threeHoursWithoutOneSeconds = AppConst.EVICTED_PERIOD_MILLIS - 1000L;
         long weatherTime = Calendar.getInstance().getTimeInMillis() - threeHoursWithoutOneSeconds;
         weather.setWeatherTime(weatherTime/1000);
 

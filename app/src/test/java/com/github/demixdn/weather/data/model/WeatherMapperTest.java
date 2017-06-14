@@ -1,11 +1,14 @@
 package com.github.demixdn.weather.data.model;
 
+import com.github.demixdn.weather.data.mapper.WeatherMapper;
 import com.github.demixdn.weather.data.model.weatherdto.WeatherResponseDTO;
 import com.github.demixdn.weather.data.parser.JsonParser;
-import com.github.demixdn.weather.data.mapper.WeatherMapper;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -16,6 +19,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Aleksandr
  */
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest=Config.NONE)
 public class WeatherMapperTest {
 
     private static final String jsonWeather = "{\"coord\":{\"lon\":30.52,\"lat\":50.43},\"weather\":[{\"id\":800,\"main\":\"Clear\",\"description\":\"clear sky\",\"icon\":\"01d\"}],\"base\":\"stations\",\"main\":{\"temp\":22.32,\"pressure\":1014,\"humidity\":35,\"temp_min\":22,\"temp_max\":23},\"visibility\":10000,\"wind\":{\"speed\":6,\"deg\":360},\"clouds\":{\"all\":0},\"dt\":1497022200,\"sys\":{\"type\":1,\"id\":7358,\"message\":0.002,\"country\":\"UA\",\"sunrise\":1496972823,\"sunset\":1497031678},\"id\":703448,\"name\":\"Kiev\",\"cod\":200}";

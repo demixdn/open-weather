@@ -1,12 +1,15 @@
 package com.github.demixdn.weather.data.network;
 
-import com.github.demixdn.weather.data.parser.JsonParser;
-import com.github.demixdn.weather.data.model.Weather;
 import com.github.demixdn.weather.data.mapper.WeatherMapper;
+import com.github.demixdn.weather.data.model.Weather;
 import com.github.demixdn.weather.data.model.weatherdto.WeatherResponseDTO;
+import com.github.demixdn.weather.data.parser.JsonParser;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import static com.github.demixdn.weather.data.network.ApiConst.PARAM_VALUE.QUERY;
 import static com.github.demixdn.weather.data.network.ApiConst.PARAM_VALUE.UNIT_METRICS;
@@ -19,6 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Aleksandr
  */
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest=Config.NONE)
 public class NetworkConnectionTest {
 
     private NetworkConnection connection;
