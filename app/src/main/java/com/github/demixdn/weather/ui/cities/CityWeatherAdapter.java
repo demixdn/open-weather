@@ -83,6 +83,9 @@ final class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherViewHolde
             items.add(item);
             int position = getItemCount() - 1;
             notifyItemInserted(position);
+        } else {
+            Weather oldItem = items.get(items.indexOf(item));
+            oldItem.update(item);
         }
     }
 

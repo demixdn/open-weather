@@ -1,5 +1,7 @@
 package com.github.demixdn.weather.data.model;
 
+import android.support.annotation.NonNull;
+
 import com.github.demixdn.weather.utils.Logger;
 
 import java.io.Serializable;
@@ -131,14 +133,26 @@ public class Weather implements Serializable {
         return diffInSec > EVICTED_PERIOD_SECONDS;
     }
 
+    public void update(@NonNull Weather item) {
+        conditionTitle = item.conditionTitle;
+        conditionDescription = item.conditionDescription;
+        conditionIcon = item.conditionIcon;
+        temp = item.temp;
+        tempMin = item.tempMin;
+        tempMax = item.tempMax;
+        pressure = item.pressure;
+        humidity = item.humidity;
+        windSpeed = item.windSpeed;
+        windDegrees = item.windDegrees;
+        weatherTimeInSeconds = item.weatherTimeInSeconds;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Weather weather = (Weather) o;
-
-        if (weatherTimeInSeconds != weather.weatherTimeInSeconds) return false;
         return city.equals(weather.city);
 
     }
