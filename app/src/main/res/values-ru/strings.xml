@@ -5,7 +5,7 @@
     <string name="pressure">Давление %1$d мм</string>
     <string name="humidity">Влажность %1$d %%</string>
     <string name="wind">Ветер %1$s м/с</string>
-    <string name="temp_min_max">%1$d&#176;/%2$d&#176;</string>
+    <string name="temp_min_max">Мин. %1$d&#176;\nМакс. %2$d&#176;</string>
     <string name="loading">Загрузка…</string>
 
     <string name="dialog_action_ok">OK</string>
@@ -27,6 +27,7 @@
 
     <string name="action_settings">Настройки</string>
     <string name="cities_weather">Погода в городах</string>
+    <string name="city_weather">Погода в %s</string>
     <string name="application_group">Приложение</string>
     <string name="profile">Профиль</string>
     <string name="about">О приложении</string>
@@ -42,7 +43,7 @@
     <string name="weather_api">Источник данных: http://openweathermap.org/</string>
     <string name="repository">Репозиторий: https://github.com/demixdn/open-weather</string>
     <string name="developer_email">Эл.почта: demixdn@gmail.com</string>
-    <string name="developer_name">Александр плужник</string>
+    <string name="developer_name">Александр Плужник</string>
     <string name="developer_title">Разработчик</string>
     <string name="auth_progress">Авторизация…</string>
     <string name="cities_progress">Получение городов…</string>

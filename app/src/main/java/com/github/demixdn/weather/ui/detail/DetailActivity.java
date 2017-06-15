@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.github.demixdn.weather.R;
 import com.github.demixdn.weather.data.model.Weather;
@@ -33,20 +36,42 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        weatherItem = (Weather) getIntent().getSerializableExtra(EXTRA_WEATHER_ITEM);
-        if (weatherItem == null) {
-            finish();
-            return;
-        }
+        if (getWeatherItem()) return;
+        setToolbarTitle();
+        showWeatherFragment();
+        showMapFragment();
+    }
+
+    private void showMapFragment() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void showWeatherFragment() {
         WeatherDetailFragment detailFragment = WeatherDetailFragment.newInstance(weatherItem);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.weather_container, detailFragment)
                 .commitAllowingStateLoss();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        mapFragment.getView().setClickable(false);
+    }
 
+    private void setToolbarTitle() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorWhite));
+        setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
+        setTitle(getString(R.string.city_weather, weatherItem.getCity().toAppString()));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+    }
+
+    private boolean getWeatherItem() {
+        weatherItem = (Weather) getIntent().getSerializableExtra(EXTRA_WEATHER_ITEM);
+        if (weatherItem == null) {
+            finish();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -57,5 +82,15 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         googleMap.setMinZoomPreference(MIN_ZOOM_PREFERENCE);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kievLatLng, ZOOM_VALUE));
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

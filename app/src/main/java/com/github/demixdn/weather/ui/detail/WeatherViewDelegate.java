@@ -57,7 +57,12 @@ final class WeatherViewDelegate {
 
         int tempMin = (int) item.getTempMin();
         int tempMax = (int) item.getTempMax();
-        tempMinMaxField.setText(getString(R.string.temp_min_max, tempMin, tempMax));
+        if (tempMin == tempMax && tempMax == tempInt) {
+            tempMinMaxField.setVisibility(View.GONE);
+        } else {
+            tempMinMaxField.setVisibility(View.VISIBLE);
+            tempMinMaxField.setText(getString(R.string.temp_min_max, tempMin, tempMax));
+        }
 
         String description = capitalizeDescription(item);
         descriptionField.setText(description);

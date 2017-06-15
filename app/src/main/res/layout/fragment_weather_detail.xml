@@ -5,70 +5,94 @@
              android:background="@color/colorPrimary"
              tools:context="com.github.demixdn.weather.ui.detail.WeatherDetailFragment">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="vertical">
+    <ScrollView
+        android:id="@+id/scrollContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivCurrentWeatherIcon"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:src="@drawable/icon_02d"
-            tools:ignore="ContentDescription"/>
-
-        <TextView
-            android:id="@+id/tvCurrentWeatherTemp"
-            style="@style/CurrentSubText"
-            android:text="@string/test_degree_celsius"
-            android:textSize="34sp"/>
-
-        <TextView
-            android:id="@+id/tvCurrentWeatherTempMinMax"
-            style="@style/CurrentSubText"
-            android:text="@string/test_temp_min_max"/>
-
-        <TextView
-            android:id="@+id/tvCurrentWeatherDescription"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:autoText="false"
-            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
-            android:text="@string/test_description"
-            android:textColor="@color/colorWhite"
-            android:textSize="14sp"/>
+            <ImageView
+                android:id="@+id/ivCurrentWeatherIcon"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:adjustViewBounds="true"
+                tools:ignore="ContentDescription"/>
 
-        <TextView
-            android:id="@+id/tvCurrentWeatherPressure"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:gravity="center_horizontal"
-            android:textColor="@color/colorWhite"
-            android:textSize="14sp"
-            android:layout_marginTop="8dp"
-            android:text="@string/test_pressure"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvCurrentWeatherHumidity"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:gravity="center_horizontal"
-            android:textColor="@color/colorWhite"
-            android:textSize="14sp"
-            android:layout_marginTop="8dp"
-            android:text="@string/test_humidity"/>
+                <TextView
+                    android:id="@+id/tvCurrentWeatherTemp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/test_degree_celsius"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="34sp"/>
 
-        <TextView
-            android:id="@+id/tvCurrentWeatherWindSpeed"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:gravity="center_horizontal"
-            android:textColor="@color/colorWhite"
-            android:textSize="14sp"
-            android:layout_marginTop="8dp"
-            android:text="@string/test_wind_speed"/>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tvCurrentWeatherTempMinMax"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:gravity="end"
+                    android:text="@string/test_temp_min_max"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvCurrentWeatherDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal"
+                android:text="@string/test_description"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvCurrentWeatherPressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal"
+                android:text="@string/test_pressure"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvCurrentWeatherHumidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal"
+                android:text="@string/test_humidity"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvCurrentWeatherWindSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal"
+                android:text="@string/test_wind_speed"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

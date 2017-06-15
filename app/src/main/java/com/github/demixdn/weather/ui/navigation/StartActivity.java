@@ -164,6 +164,7 @@ public class StartActivity extends AppCompatActivity
 
     @Override
     public void showCities() {
+        setTitle(R.string.cities_weather);
         progressDialog.dismiss();
         navigationView.getMenu().getItem(INDEX_CITY).setChecked(true);
         fabShow();
@@ -171,6 +172,7 @@ public class StartActivity extends AppCompatActivity
     }
 
     private void showAppInfo() {
+        setTitle(R.string.about);
         progressDialog.dismiss();
         navigationView.getMenu().getItem(INDEX_ABOUT).setChecked(true);
         fabHide();
@@ -178,6 +180,7 @@ public class StartActivity extends AppCompatActivity
     }
 
     private void showProfile() {
+        setTitle(R.string.profile);
         progressDialog.dismiss();
         navigationView.getMenu().getItem(INDEX_PROFILE).setChecked(true);
         fabHide();

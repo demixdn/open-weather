@@ -28,7 +28,16 @@
             android:id="@+id/map"
             class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:clickable="false"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:clickable="false"/>
+
+        <View
+            android:id="@+id/clickInterceptor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
     </FrameLayout>
 </LinearLayout>

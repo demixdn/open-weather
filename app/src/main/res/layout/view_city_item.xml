@@ -10,6 +10,8 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:id="@+id/llCityContent"
+        android:clickable="true"
+        android:background="?selectableItemBackgroundBorderless"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
